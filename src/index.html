@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css" />
+    <title>아무 말 대잔치</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // 서버 구현 전 임시 구현
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        if (isLoggedIn) {
+          window.location.href = "./community/community.html";
+        } else {
+          window.location.href = "./login/login.html";
+        }
+      })
+    </script>
+</head>
+<body>
+
+</body>
+</html>
