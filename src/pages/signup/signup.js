@@ -146,7 +146,7 @@ function addSignupButtonTapEventListener() {
         if (true) {
             // 로그인 성공
             localStorage.setItem('isLoggedIn', true)
-            window.location.href = '/pages/community/community.html'
+            window.location.href = '/pages/login/login.html'
         }
 
 
