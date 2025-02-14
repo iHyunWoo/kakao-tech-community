@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="signup.css">
+  <title>회원가입</title>
+</head>
+<body>
+  <header class="header">
+    <div id="title-back-icon-section">
+      <button id="back-button">
+        <img width="48px" height="48px" src="/resources/back-arrow.svg" alt=""/>
+      </button>
+      <p class="header-title">아무말 대잔치</p>
+    </div>
+    <hr class="header-hr"/>
+  </header>
+  <section id="signup-section">
+    <h2 id="signup-title">회원가입</h2>
+
+    <div>
+      <div id="profile-image-div">
+        <p class="title">프로필 사진</p>
+        <p class="signup-alert-message" id="profile-image-alert-message">* 프로필 사진을 추가해주세요.</p>
+      </div>
+      <div id="profile-image-upload-div">
+        <input type="file" id="profile-image-input" accept="image/*"/>
+        <button id="profile-image-button">
+          <img id="profile-image" src="/resources/plus-in-circle.png" alt=""/>
+        </button>
+      </div>
+
+      <form id="signup-form">
+        <label class="signup-label" for="email">이메일*</label>
+        <input class="signup-input" type="text" id="email" placeholder="이메일을 입력하세요">
+        <p class="signup-alert-message" id="email-alert-message">* helper text</p>
+        <label class="signup-label" for="password">비밀번호*</label>
+        <input class="signup-input" type="password" id="password" placeholder="비밀번호를 입력하세요">
+        <p class="signup-alert-message" id="password-alert-message">* helper text</p>
+        <label class="signup-label" for="password-confirm">비밀번호 확인*</label>
+        <input class="signup-input" type="password" id="password-confirm" placeholder="비밀번호를 한번 더 입력하세요">
+        <p class="signup-alert-message" id="password-confirm-alert-message">* helper text</p>
+        <label class="signup-label" for="nickname">닉네임*</label>
+        <input class="signup-input" type="text" id="nickname" placeholder="이메일을 입력하세요">
+        <p class="signup-alert-message" id="nickname-alert-message">* helper text</p>
+        <input class="signup-button" type="submit" value="회원가입">
+      </form>
+    </div>
+    <a id="login-button">로그인하러 가기</a>
+
+    <script src="signup.js"></script>
+  </section>
+</body>
+</html>

@@ -16,12 +16,26 @@ body, html {
     font-family: "Noto Sans KR", sans-serif;
 }
 
+button {
+    all: unset; /* 기본 스타일 제거 (outline, border, padding 등) */
+    cursor: pointer; /* 클릭 가능한 요소로 유지 */
+    display: inline-block; /* 필요시 적용 */
+}
+
+
 /* 헤더 */
 .header {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
+}
+
+#title-back-icon-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-title {
@@ -38,9 +52,17 @@ body, html {
     background-color: #000000;
 }
 
-/* 로그인 */
+#back-button {
+    display: flex;
+    flex-direction: row;
+    background: none;
+    position: absolute;
+    left: 30%;
+    cursor: pointer;
+}
 
-#login-section {
+/* 회원가입 */
+#signup-section {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -48,26 +70,60 @@ body, html {
     justify-content: center;
 }
 
-#login-title {
+#signup-title {
     font-weight: 700;
     font-size: 32px;
-    margin-bottom: 50px;
+
+    margin-bottom: 20px;
 }
 
-#login-form {
-    width: 360px;
-}
-
-.login-label {
+#profile-image-div {
     display: flex;
     flex-direction: column;
+    align-items: start;
+}
 
+.title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+#profile-image-input {
+    display: none;
+}
+
+#profile-image-upload-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#profile-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 100%;
+
+    background-color: #F4F5F7;
+
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+#signup-form {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-label {
     font-weight: 700;
     font-size: 15px;
     margin-bottom: 8px;
 }
 
-.login-input {
+.signup-input {
     width: 100%;
     border: 1px solid #000000;
     border-radius: 4px;
@@ -77,13 +133,13 @@ body, html {
 }
 
 
-.login-input::placeholder {
+.signup-input::placeholder {
     font-weight: 400;
     font-size: 14px;
     color: #000000;
 }
 
-.login-alert-message {
+.signup-alert-message {
     color: #ff0000;
     font-size: 12px;
     font-weight: 400;
@@ -92,12 +148,14 @@ body, html {
     margin-bottom: 8px;
 }
 
-.login-button {
+.signup-button {
     width: 100%;
     height: 36px;
 
     background-color: #ACA0EB;
     border-radius: 4px;
+
+    cursor: pointer;
 
     color: #ffffff;
     font-weight: 700;
@@ -105,7 +163,7 @@ body, html {
     margin-top: 12px;
 }
 
-#signup-button {
+#login-button {
     font-size: 14px;
     font-weight: 400;
 
