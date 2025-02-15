@@ -1,0 +1,73 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    gap: 20px;
+    margin: auto;
+}
+
+.post-item {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 3px 4px 4px rgba(204, 204, 204, 0.25);
+
+    cursor: pointer;
+}
+
+/*제목*/
+.post-title {
+    font-weight: 700;
+    font-size: 24px;
+
+    /*상좌하우*/
+    margin: 18px 24px 10px 24px;
+}
+
+/*스탯과 날짜*/
+.post-stats-date {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    font-weight: 400;
+    font-size: 14px;
+
+    /*상좌하우*/
+    margin: 0 24px 24px 24px;
+}
+
+/*구분선*/
+.post-hr {
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.16);
+    border: none;
+
+    margin-bottom: 16px;
+}
+
+.post-user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+
+    /*상좌하우*/
+    margin: 0 24px 16px 24px;
+}
+
+.post-user-image {
+    width: 36px;
+    height: 36px;
+    border-radius: 100%;
+}
+
+.post-user-name {
+    font-weight: 700;
+    font-size: 15px;
+}

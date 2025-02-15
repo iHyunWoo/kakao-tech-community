@@ -1,0 +1,24 @@
+.header {
+    max-width: 600px;
+    height: 104px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: auto;
+}
+
+.header-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.header-hr {
+    width: 100%;
+    height: 1px;
+    border: none;
+    background: #000000;
+}

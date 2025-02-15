@@ -19,7 +19,6 @@ body, html {
 button {
     all: unset; /* 기본 스타일 제거 (outline, border, padding 등) */
     cursor: pointer; /* 클릭 가능한 요소로 유지 */
-    display: inline-block; /* 필요시 적용 */
 }
 
 
