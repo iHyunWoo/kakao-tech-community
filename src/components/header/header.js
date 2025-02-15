@@ -1,4 +1,4 @@
-import Component from "../../core/Component.js";
+import Component from "../../core/component.js";
 
 const loadHeaderCSS = () => {
     if (!document.querySelector("#header-style")) {

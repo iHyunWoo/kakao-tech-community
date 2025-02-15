@@ -1,4 +1,4 @@
-import PostList from "./components/PostList.js";
+import PostList from "./components/post-list.js";
 import Header from "../../components/header/header.js";
 
 async function fetchPosts() {

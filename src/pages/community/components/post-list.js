@@ -1,11 +1,11 @@
-import Component from "../../../core/Component.js";
+import Component from "../../../core/component.js";
 
 const loadCSS = () => {
     if (!document.querySelector("#post-list-style")) {
         const link = document.createElement("link");
         link.id = "post-list-style";
         link.rel = "stylesheet";
-        link.href = "./components/PostList.css";
+        link.href = "./components/post-list.css";
         document.head.appendChild(link);
     }
 };
