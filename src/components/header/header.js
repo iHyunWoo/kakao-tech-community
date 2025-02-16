@@ -64,5 +64,10 @@ export default class Header extends  Component {
         profileEditButton.addEventListener("click", () => {
             window.location.href = "/pages/profile/edit/profile-edit-page.html"
         })
+
+        const passwordEditButton = document.getElementById("header-profile-dropdown-edit-password-button")
+        passwordEditButton.addEventListener("click", () => {
+            window.location.href = "/pages/profile/password-edit/password-edit-page.html"
+        })
     }
 }
