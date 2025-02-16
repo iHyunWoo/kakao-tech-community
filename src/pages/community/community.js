@@ -1,4 +1,4 @@
-import PostList from "./components/post-list.js";
+import PostList from "./components/post-list/post-list.js";
 import Header from "../../components/header/header.js";
 
 async function fetchPosts() {
@@ -70,20 +70,31 @@ function onWritePostButtonClick() {
 
 }
 
+function onPostDetailClick() {
+    window.location.href = '/pages/community/detail/post-detail.html'
+}
+
 function addEventListeners() {
     const button = document.getElementById("write-post-button")
     button.addEventListener("click",  () => {
         // 게시물 작성으로 이동
         onWritePostButtonClick()
     })
+
+    const postItems = document.querySelectorAll('.post-item')
+    postItems.forEach(item => {
+        item.addEventListener("click", () => {
+            // 게시물 상세로 이동
+            onPostDetailClick()
+        });
+    })
+
 }
 
 async function init() {
-    addEventListeners()
-
     const $header = new Header(
         document.getElementById("header"),
-        { showBackButton: false, showProfile: true },
+        { showBackButton: true, showProfile: true },
     )
     const $postList = new PostList(
         document.querySelector("#post-list"),
@@ -92,6 +103,8 @@ async function init() {
 
     const posts = await fetchPosts();
     $postList.setPosts(posts);
+
+    addEventListeners()
 }
 
 init();

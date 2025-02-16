@@ -5,7 +5,7 @@ const loadHeaderCSS = () => {
         const link = document.createElement("link");
         link.id = "header-style";
         link.rel = "stylesheet";
-        link.href = "../../components/header/Header.css"; // CSS 파일 경로
+        link.href = "/components/header/header.css";
         document.head.appendChild(link);
     }
 };
@@ -44,6 +44,9 @@ export default class Header extends  Component {
     }
 
     setEvent() {
-
+        const backButton = document.querySelector("#header-back-button");
+        backButton.addEventListener("click", () => {
+            history.back()
+        })
     }
 }

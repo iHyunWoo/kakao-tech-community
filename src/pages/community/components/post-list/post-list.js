@@ -1,11 +1,11 @@
-import Component from "../../../core/component.js";
+import Component from "../../../../core/component.js";
 
 const loadCSS = () => {
     if (!document.querySelector("#post-list-style")) {
         const link = document.createElement("link");
         link.id = "post-list-style";
         link.rel = "stylesheet";
-        link.href = "./components/post-list.css";
+        link.href = "./components/post-list/post-list.css";
         document.head.appendChild(link);
     }
 };
@@ -21,7 +21,7 @@ export default class PostList extends Component {
             <div class="post-list">
                 ${this.state.posts
             .map(post => ( `
-                <div class="post-item">
+                <div class="post-item" role="button ">
                     <h2 class="post-title">${post.title}</h2>
                     <div class="post-stats-date">
                         <div class="post-stats">
