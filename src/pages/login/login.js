@@ -43,7 +43,7 @@ function addLoginButtonEventListener() {
         if (true) {
             // 로그인 성공
             localStorage.setItem('isLoggedIn', true)
-            window.location.href = '/pages/community/community.html'
+            window.location.href = '/pages/post/community.html'
         } else {
             passwordAlert.textContent = '아이디 또는 비밀번호를 확인해주세요.';
             passwordAlert.style.visibility = 'visible';

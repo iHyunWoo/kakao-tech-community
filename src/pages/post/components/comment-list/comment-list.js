@@ -5,7 +5,7 @@ const loadCSS = () => {
         const link = document.createElement("link");
         link.id = "comment-list-style";
         link.rel = "stylesheet";
-        link.href = "/pages/community/components/comment-list/comment-list.css";
+        link.href = "/pages/post/components/comment-list/comment-list.css";
         document.head.appendChild(link);
     }
 };
