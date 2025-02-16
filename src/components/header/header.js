@@ -49,25 +49,29 @@ export default class Header extends  Component {
     }
 
     setEvent() {
-        const backButton = document.querySelector("#header-back-button");
-        backButton.addEventListener("click", () => {
-            history.back()
-        })
+        if (this.state.showBackButton) {
+            const backButton = document.querySelector("#header-back-button");
+            backButton.addEventListener("click", () => {
+                history.back()
+            })
+        }
 
-        const profileButton = document.getElementById("header-profile-button");
-        profileButton.addEventListener("click", () => {
-            const dropdown = document.getElementById("header-profile-dropdown-menu");
-            dropdown.classList.toggle("hidden");
-        })
+        if (this.state.showProfile) {
+            const profileButton = document.getElementById("header-profile-button");
+            profileButton.addEventListener("click", () => {
+                const dropdown = document.getElementById("header-profile-dropdown-menu");
+                dropdown.classList.toggle("hidden");
+            })
 
-        const profileEditButton = document.getElementById("header-profile-dropdown-edit-profile-button")
-        profileEditButton.addEventListener("click", () => {
-            window.location.href = "/pages/profile/edit/profile-edit-page.html"
-        })
+            const profileEditButton = document.getElementById("header-profile-dropdown-edit-profile-button")
+            profileEditButton.addEventListener("click", () => {
+                window.location.href = "/pages/profile/edit/profile-edit-page.html"
+            })
 
-        const passwordEditButton = document.getElementById("header-profile-dropdown-edit-password-button")
-        passwordEditButton.addEventListener("click", () => {
-            window.location.href = "/pages/profile/password-edit/password-edit-page.html"
-        })
+            const passwordEditButton = document.getElementById("header-profile-dropdown-edit-password-button")
+            passwordEditButton.addEventListener("click", () => {
+                window.location.href = "/pages/profile/password-edit/password-edit-page.html"
+            })
+        }
     }
 }

@@ -94,7 +94,7 @@ function addEventListeners() {
 async function init() {
     const $header = new Header(
         document.getElementById("header"),
-        { showBackButton: true, showProfile: true },
+        { showBackButton: false, showProfile: true },
     )
     const $postList = new PostList(
         document.querySelector("#post-list"),
