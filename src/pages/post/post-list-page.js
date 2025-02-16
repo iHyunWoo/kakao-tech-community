@@ -66,8 +66,8 @@ async function fetchPosts() {
     ];
 }
 
-function onWritePostButtonClick() {
-
+function onPostCreateClick() {
+    window.location.href = '/pages/post/form/post-form-page.html?mode=create'
 }
 
 function onPostDetailClick() {
@@ -75,10 +75,10 @@ function onPostDetailClick() {
 }
 
 function addEventListeners() {
-    const button = document.getElementById("write-post-button")
-    button.addEventListener("click",  () => {
+    const postCreateButton = document.getElementById("write-post-button")
+    postCreateButton.addEventListener("click",  () => {
         // 게시물 작성으로 이동
-        onWritePostButtonClick()
+        onPostCreateClick()
     })
 
     const postItems = document.querySelectorAll('.post-item')
