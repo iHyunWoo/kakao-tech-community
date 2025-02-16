@@ -34,8 +34,12 @@ export default class Header extends  Component {
                 <div class="header-right">
                     ${this.state.showProfile ? `
                         <button id="header-profile-button">
-                            <img width="36px" height="36px" src="${this.state.userProfileImage}" alt=""/>
+                            <img id="header-profile-image" width="36px" height="36px" src="https://placehold.co/36" alt=""/>
                         </button>
+                        <ul id="header-profile-dropdown-menu" class="hidden">
+                           <li class="header-profile-dropdown-item">회원정보 수정</li>
+                           <li class="header-profile-dropdown-item">로그아웃</li> 
+                        </ul>
                     ` : ""}
                 </div>
             </header>
@@ -47,6 +51,12 @@ export default class Header extends  Component {
         const backButton = document.querySelector("#header-back-button");
         backButton.addEventListener("click", () => {
             history.back()
+        })
+
+        const profileButton = document.getElementById("header-profile-button");
+        profileButton.addEventListener("click", () => {
+            const dropdown = document.getElementById("header-profile-dropdown-menu");
+            dropdown.classList.toggle("hidden");
         })
     }
 }
