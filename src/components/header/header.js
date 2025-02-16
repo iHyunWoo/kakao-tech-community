@@ -37,8 +37,9 @@ export default class Header extends  Component {
                             <img id="header-profile-image" width="36px" height="36px" src="https://placehold.co/36" alt=""/>
                         </button>
                         <ul id="header-profile-dropdown-menu" class="hidden">
-                           <li class="header-profile-dropdown-item">회원정보 수정</li>
-                           <li class="header-profile-dropdown-item">로그아웃</li> 
+                           <li class="header-profile-dropdown-item" id="header-profile-dropdown-edit-profile-button">회원정보 수정</li>
+                           <li class="header-profile-dropdown-item" id="header-profile-dropdown-edit-password-button">비밀번호 수정</li>
+                           <li class="header-profile-dropdown-item" id="header-profile-dropdown-logout-button">로그아웃</li> 
                         </ul>
                     ` : ""}
                 </div>
@@ -57,6 +58,11 @@ export default class Header extends  Component {
         profileButton.addEventListener("click", () => {
             const dropdown = document.getElementById("header-profile-dropdown-menu");
             dropdown.classList.toggle("hidden");
+        })
+
+        const profileEditButton = document.getElementById("header-profile-dropdown-edit-profile-button")
+        profileEditButton.addEventListener("click", () => {
+            window.location.href = "/pages/profile/edit/profile-edit-page.html"
         })
     }
 }

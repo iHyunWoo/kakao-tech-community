@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    all: unset; /* 기본 스타일 제거 (outline, border, padding 등) */
+    cursor: pointer; /* 클릭 가능한 요소로 유지 */
+}
+
+html, body {
+    background-color: #F4F5F7;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 360px;
+    margin: auto;
+
+    flex: 1;
+}
+
+#profile-edit-header {
+    font-weight: 700;
+    font-size: 32px;
+
+    margin: 0 auto 12px;
+}
+
+.profile-edit-title {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+#profile-edit-profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+
+    margin: 22px auto 36px;
+}
+
+#profile-edit-email {
+    font-weight: 400;
+    font-size: 14px;
+
+    margin: 8px 0 16px;
+}
+
+#profile-edit-nickname-input {
+    height: 33px;
+
+    margin-top: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+
+    outline: none;
+}
+
+#profile-edit-nickname-edit-button {
+    height: 33px;
+
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+
+    background-color: #ACA0EB;
+    border-radius: 8px;
+
+    margin-top: 32px;
+}
+
+#profile-edit-delete-account-button {
+    font-size: 14px;
+    font-weight: 400;
+    margin: 12px auto 0;
+}
+
+#profile-edit-submit-edit-button {
+    width: 102px;
+    height: 46px;
+
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+
+    background-color: #ACA0EB;
+    border-radius: 24px;
+
+    margin: 40px auto;
+}
