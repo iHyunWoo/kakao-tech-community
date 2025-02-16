@@ -146,7 +146,7 @@ function addSignupButtonTapEventListener() {
         if (true) {
             // 로그인 성공
             localStorage.setItem('isLoggedIn', true)
-            window.location.href = '/pages/login/login.html'
+            window.location.href = '/pages/login/login-page.html'
         }
 
 
@@ -170,6 +170,6 @@ function validatePasswordConfirm(password, passwordConfirm) {
 function addLoginButtonEventListener() {
     const loginButton = document.getElementById('login-button');
     loginButton.addEventListener('click', function (event) {
-        window.location.href = '/pages/login/login.html'
+        window.location.href = '/pages/login/login-page.html'
     })
 }

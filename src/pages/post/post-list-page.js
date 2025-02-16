@@ -71,7 +71,7 @@ function onWritePostButtonClick() {
 }
 
 function onPostDetailClick() {
-    window.location.href = '/pages/post/detail/post-detail.html'
+    window.location.href = '/pages/post/detail/post-detail-page.html'
 }
 
 function addEventListeners() {

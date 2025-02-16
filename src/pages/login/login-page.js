@@ -43,7 +43,7 @@ function addLoginButtonEventListener() {
         if (true) {
             // 로그인 성공
             localStorage.setItem('isLoggedIn', true)
-            window.location.href = '/pages/post/community.html'
+            window.location.href = '/pages/post/post-list-page.html'
         } else {
             passwordAlert.textContent = '아이디 또는 비밀번호를 확인해주세요.';
             passwordAlert.style.visibility = 'visible';
@@ -66,6 +66,6 @@ function validatePassword(password) {
 function addSignupButtonEventListener() {
     const signupButton = document.getElementById('signup-button');
     signupButton.addEventListener('click', function (event) {
-        window.location.href = '/pages/signup/signup.html'
+        window.location.href = '/pages/signup/signup-page.html'
     })
 }
