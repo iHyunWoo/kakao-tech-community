@@ -28,3 +28,7 @@
     color: #ffffff;
     line-height: 25px;
 }
+
+#write-post-button:hover {
+    background-color: #7F6AEE;
+}
