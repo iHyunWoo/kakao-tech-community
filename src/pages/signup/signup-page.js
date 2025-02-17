@@ -131,7 +131,6 @@ function onSignupButtonClick() {
     // 후에 회원가입 성공/실패 로직 추가
     if (true) {
         // 로그인 성공
-        localStorage.setItem('isLoggedIn', true)
         window.location.href = '/pages/login/login-page.html'
     }
 

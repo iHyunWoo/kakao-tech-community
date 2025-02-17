@@ -50,27 +50,33 @@ export default class Header extends  Component {
 
     setEvent() {
         if (this.state.showBackButton) {
-            const backButton = document.querySelector("#header-back-button");
-            backButton.addEventListener("click", () => {
+            const $backButton = document.querySelector("#header-back-button");
+            $backButton.addEventListener("click", () => {
                 history.back()
             })
         }
 
         if (this.state.showProfile) {
-            const profileButton = document.getElementById("header-profile-button");
-            profileButton.addEventListener("click", () => {
+            const $profileButton = document.getElementById("header-profile-button");
+            $profileButton.addEventListener("click", () => {
                 const dropdown = document.getElementById("header-profile-dropdown-menu");
                 dropdown.classList.toggle("hidden");
             })
 
-            const profileEditButton = document.getElementById("header-profile-dropdown-edit-profile-button")
-            profileEditButton.addEventListener("click", () => {
+            const $profileEditButton = document.getElementById("header-profile-dropdown-edit-profile-button")
+            $profileEditButton.addEventListener("click", () => {
                 window.location.href = "/pages/profile/edit/profile-edit-page.html"
             })
 
-            const passwordEditButton = document.getElementById("header-profile-dropdown-edit-password-button")
-            passwordEditButton.addEventListener("click", () => {
+            const $passwordEditButton = document.getElementById("header-profile-dropdown-edit-password-button")
+            $passwordEditButton.addEventListener("click", () => {
                 window.location.href = "/pages/profile/password-edit/password-edit-page.html"
+            })
+
+            const $logoutButton = document.getElementById("header-profile-dropdown-logout-button");
+            $logoutButton.addEventListener("click", () => {
+                localStorage.setItem('isLoggedIn', false)
+                window.location.href = "/index.html"
             })
         }
     }
