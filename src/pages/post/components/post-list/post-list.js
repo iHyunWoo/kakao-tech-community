@@ -21,11 +21,11 @@ export default class PostList extends Component {
             <div class="post-list">
                 ${this.state.posts
             .map(post => ( `
-                <div class="post-item" role="button ">
+                <div class="post-item" role="button" data-id="${post.id}">
                     <h2 class="post-title">${post.title}</h2>
                     <div class="post-stats-date">
                         <div class="post-stats">
-                            좋아요 ${post.likes} 댓글 ${post.comments} 조회수 ${post.views}
+                            좋아요 ${post.likeCount} 댓글 ${post.commentCount} 조회수 ${post.viewCount}
                         </div>
                         <p class="post-date">${post.date}</p>
                     </div>
@@ -43,9 +43,6 @@ export default class PostList extends Component {
     }
 
     setEvent() {
-        this.addEvent("click", ".post-item", (event) => {
-
-        })
     }
 
     setPosts(posts) {

@@ -34,15 +34,11 @@ export default class CommentList extends Component {
                         </div>
                         `: ""}
                     </div>
-                    <p id="comment-comment">${comment.comment}</p>
+                    <p id="comment-comment">${comment.content}</p>
                 </div>
             `))
             .join("")
         }
         `
-    }
-
-    setPosts(comments) {
-        this.setState({comments});
     }
 }
