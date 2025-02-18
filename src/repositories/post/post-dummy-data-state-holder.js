@@ -85,11 +85,23 @@ const postDetailDummyDataList = [
                 isMine: false,
             },
             {
+                id: 8,
+                content: "더미 작성자 2님, 댓글 감사합니다.",
+                author: { id: 1, name: "더미 작성자 1", profileImage: "https://placehold.co/36" },
+                isMine: true,
+            },
+            {
                 id: 2,
                 content: "멋진 글이에요!",
                 author: { id: 3, name: "더미 작성자 3", profileImage: "https://placehold.co/36" },
                 isMine: false,
-            }
+            },
+            {
+                id: 9,
+                content: "더미 작성자 3님, 댓글 감사합니다.",
+                author: { id: 1, name: "더미 작성자 1", profileImage: "https://placehold.co/36" },
+                isMine: true,
+            },
         ]
     },
     {

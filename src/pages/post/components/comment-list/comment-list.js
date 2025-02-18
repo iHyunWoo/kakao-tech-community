@@ -29,8 +29,8 @@ export default class CommentList extends Component {
                         </div>
                         ${comment.isMine ? `
                         <div id="comment-edit-delete-button">
-                            <button class="comment-edit-delete-button" id="comment-edit-button">수정</button>
-                            <button class="comment-edit-delete-button" id="comment-delete-button">삭제</button>
+                            <button class="comment-edit-button">수정</button>
+                            <button class="comment-delete-button">삭제</button>
                         </div>
                         `: ""}
                     </div>

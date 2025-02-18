@@ -56,9 +56,12 @@ function addEventListeners() {
         $deleteButton.addEventListener("click", onDeletePostButtonClick);
     }
 
-    const $deleteCommentButton = document.getElementById("comment-delete-button");
-    if ($deleteCommentButton) {
-        $deleteCommentButton.addEventListener("click", onDeleteCommentButtonClick);
+    const $deleteCommentButtons = document.querySelectorAll(".comment-delete-button");
+    if ($deleteCommentButtons) {
+        $deleteCommentButtons.forEach(($deleteCommentButton) => {
+            $deleteCommentButton.addEventListener("click", onDeleteCommentButtonClick);
+        })
+
     }
 
 }
