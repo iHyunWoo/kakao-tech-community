@@ -12,7 +12,13 @@
   <div id="container">
     <h2 id="profile-edit-header">회원정보 수정</h2>
     <p class="profile-edit-title">프로필 사진*</p>
-    <img id="profile-edit-profile-image" src="https://placehold.co/150" alt=""/>
+    <div id="profile-image-container">
+      <input id="profile-edit-profile-image-input" type="file" accept="image/*">
+      <img id="profile-edit-profile-image" src="https://placehold.co/150" alt=""/>
+      <div id="profile-edit-profile-image-edit-button">
+        <p id="profile-edit-profile-image-edit-button-text">변경</p>
+      </div>
+    </div>
     <p class="profile-edit-title">이메일</p>
     <p id="profile-edit-email">jrwedo7@gmail.com</p>
     <p class="profile-edit-title">닉네임</p>

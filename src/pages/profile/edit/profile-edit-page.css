@@ -25,12 +25,53 @@ body {
     font-size: 15px;
 }
 
-#profile-edit-profile-image {
+#profile-image-container {
+    margin: 22px auto 36px;
+
+    position: relative;
+}
+
+#profile-edit-profile-image-input {
+    display: none;
+}
+
+#profile-edit-profile-image-edit-button {
+    position: absolute;
     width: 150px;
     height: 150px;
     border-radius: 100%;
 
-    margin: 22px auto 36px;
+    top: 0;
+    left: 0;
+
+    background-color: rgba(70, 70, 70, 0.55);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+#profile-edit-profile-image-edit-button-text {
+    background-color: rgba(0, 0, 0, 0.35);
+    width: 52px;
+    height: 27px;
+
+    text-align: center;
+
+    border: 1px solid #ffffff;
+    border-radius: 25px;
+
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+#profile-edit-profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
 }
 
 #profile-edit-email {

@@ -18,9 +18,28 @@ function onDeleteAccountButtonClick() {
     deleteAccountModal.open();
 }
 
+function onProfileImageChange(e) {
+    const file = e.target.files[0];
+    if(file) {
+        const reader = new FileReader();
+        const $profileImage = document.getElementById("profile-edit-profile-image")
+        reader.onload = (e) => {
+            $profileImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
 function addEventListeners() {
     const $deleteAccountButton = document.getElementById("profile-edit-delete-account-button");
     $deleteAccountButton.addEventListener('click', onDeleteAccountButtonClick);
+
+    const $profileImageEditButton = document.getElementById("profile-edit-profile-image-edit-button")
+    const $profileImageInput = document.getElementById("profile-edit-profile-image-input");
+    $profileImageEditButton.addEventListener('click', () => {
+        $profileImageInput.click();
+    });
+    $profileImageInput.addEventListener('change', onProfileImageChange);
 }
 
 function init() {
