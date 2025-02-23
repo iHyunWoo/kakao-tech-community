@@ -27,11 +27,11 @@ export default class PostList extends Component {
                         <div class="post-stats">
                             좋아요 ${post.likeCount} 댓글 ${post.commentCount} 조회수 ${post.viewCount}
                         </div>
-                        <p class="post-date">${post.date}</p>
+                        <p class="post-date">${post.createdAt}</p>
                     </div>
                     <hr class="post-hr">
                     <div class="post-user">
-                        <img class="post-user-image" src="${post.author.profileImage}" alt="">
+                        <img class="post-user-image" src="${post.author.profileImageUrl}" alt="">
                         <p class="post-user-name">${post.author.name}</p>
                     </div>
                 </div>

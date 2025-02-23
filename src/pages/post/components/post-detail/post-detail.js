@@ -1,5 +1,4 @@
 import Component from "../../../../core/component.js";
-import {getPostDetail} from "../../../../repositories/post/post-repository.js";
 
 const loadCSS = () => {
     if (!document.querySelector("#post-detail-style")) {
@@ -26,9 +25,9 @@ export default class PostDetail extends Component {
                   <h2 id="post-title">${post.title}</h2>
                   <div id="post-info">
                     <div id="post-user">
-                      <img id="post-user-image" src="${post.author.profileImage}" alt="">
+                      <img id="post-user-image" src="${post.author.profileImageUrl}" alt="">
                       <p id="post-user-name">${post.author.name}</p>
-                      <p id="post-created-at">${post.date}</p>
+                      <p id="post-created-at">${post.createdAt}</p>
                     </div>
                     ${post.isMine ? `
                     <div id="edit-delete-button">

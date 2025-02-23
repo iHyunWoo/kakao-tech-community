@@ -23,9 +23,9 @@ export default class CommentList extends Component {
                 <div id="comment-item">
                     <div id="comment-top-section">
                         <div id="comment-user-date">   
-                            <img id="comment-user-image" src="${comment.author.profileImage}" alt="">
+                            <img id="comment-user-image" src="${comment.author.profileImageUrl}" alt="">
                             <p id="comment-user-name">${comment.author.name}</p>
-                            <p id="comment-date">${comment.date}</p>
+                            <p id="comment-date">${comment.createdAt}</p>
                         </div>
                         ${comment.isMine ? `
                         <div id="comment-edit-delete-button">

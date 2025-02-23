@@ -1,14 +1,19 @@
-import {postDetailDummyDataList, postPreviewCountDummyDataList} from "./post-dummy-data-state-holder.js";
+import {postDummyDataList, commentDummyDataList} from "./post-dummy-data.js";
 
 
-function getPostPreview() {
-    return postPreviewCountDummyDataList;
+function getPosts() {
+    return postDummyDataList;
 }
 
-function getPostDetail(id) {
+function getPost(id) {
     const idInt = parseInt(id);
-    return postDetailDummyDataList.find(post => post.id === idInt);
+    return postDummyDataList.find(post => post.id === idInt);
 }
 
-export { getPostPreview, getPostDetail };
+function getPostComments(postId) {
+    const idInt = parseInt(postId);
+    return commentDummyDataList.filter(comment => comment.postId === idInt);
+}
+
+export { getPosts, getPost, getPostComments };
 
