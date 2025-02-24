@@ -4,6 +4,9 @@ import PostDetail from "../components/post-detail/post-detail.js";
 import PostRepository from "../../../repositories/post/post-repository.js";
 import Modal from "../../../components/modal/modal.js";
 
+const urlParams = new URLSearchParams(window.location.search);
+const postId= parseInt(urlParams.get("id"));
+
 // 게시글 삭제 모달
 const deletePostModal = new Modal(
     document.getElementById("modal"),
@@ -71,9 +74,6 @@ async function fetchComments(postId) {
 }
 
 async function init() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId= parseInt(urlParams.get("id"));
-
     const $header = new Header(
         document.getElementById("header"),
         { showBackButton: true, showProfile: true },
