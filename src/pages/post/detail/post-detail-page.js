@@ -1,7 +1,7 @@
 import Header from "../../../components/header/header.js";
 import CommentList from "../components/comment-list/comment-list.js";
 import PostDetail from "../components/post-detail/post-detail.js";
-import {getPost, getPostComments} from "../../../repositories/post/post-repository.js";
+import PostRepository from "../../../repositories/post/post-repository.js";
 import Modal from "../../../components/modal/modal.js";
 
 // 게시글 삭제 모달
@@ -62,15 +62,15 @@ function addEventListeners() {
 
 }
 
-function fetchPost(postId) {
-    return getPost(postId)
+async function fetchPost(postId) {
+    return await PostRepository.getPost(postId);
 }
 
-function fetchComments(postId) {
-    return getPostComments(postId);
+async function fetchComments(postId) {
+    return await PostRepository.getComments(postId);
 }
 
-function init() {
+async function init() {
     const urlParams = new URLSearchParams(window.location.search);
     const postId= parseInt(urlParams.get("id"));
 
@@ -79,13 +79,13 @@ function init() {
         { showBackButton: true, showProfile: true },
     )
 
-    const post = fetchPost(postId);
+    const post = await fetchPost(postId);
     const $postDetail = new PostDetail(
         document.getElementById("post-detail-section"),
     { post: post }
     )
 
-    const comments = fetchComments(postId);
+    const comments = await fetchComments(postId);
     const $commentList = new CommentList(
         document.querySelector("#comment-list"),
         { comments: comments }

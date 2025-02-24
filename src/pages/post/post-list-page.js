@@ -1,9 +1,9 @@
 import PostList from "./components/post-list/post-list.js";
 import Header from "../../components/header/header.js";
-import {getPosts} from "../../repositories/post/post-repository.js";
+import PostRepository from "../../repositories/post/post-repository.js";
 
-function fetchPosts() {
-    return getPosts();
+async function fetchPosts() {
+    return await PostRepository.getPosts();
 }
 
 function onPostCreateClick() {
@@ -42,7 +42,7 @@ async function init() {
         { posts: [] }
     )
 
-    const posts = fetchPosts();
+    const posts = await fetchPosts();
     $postList.setPosts(posts);
 
     addEventListeners()

@@ -1,0 +1,70 @@
+{
+  "message" : "create_success",
+  "data": {
+    "comments": [
+      {
+        "postId": 1,
+        "id": 1,
+        "createdAt": "2024-02-15 10:00:00",
+        "updatedAt": "2024-02-15 10:00:00",
+        "content": "정말 공감됩니다!",
+        "isMine": false,
+        "author": {"id": 2, "name": "더미 작성자 2", "profileImageUrl": "https://placehold.co/36"}
+      },
+      {
+        "postId": 1,
+        "id": 8,
+        "createdAt": "2024-02-15 10:00:00",
+        "updatedAt": "2024-02-15 10:00:00",
+        "content": "더미 작성자 2님, 댓글 감사합니다.",
+        "isMine": true,
+        "author": {"id": 1, "name": "더미 작성자 1", "profileImageUrl": "https://placehold.co/36"}
+      },
+      {
+        "postId": 1,
+        "id": 2,
+        "createdAt": "2024-02-15 10:00:00",
+        "updatedAt": "2024-02-15 10:00:00",
+        "content": "멋진 글이에요!",
+        "isMine": false,
+        "author": {"id": 3, "name": "더미 작성자 3", "profileImageUrl": "https://placehold.co/36"}
+      },
+      {
+        "postId": 1,
+        "id": 9,
+        "createdAt": "2024-02-15 10:00:00",
+        "updatedAt": "2024-02-15 10:00:00",
+        "content": "더미 작성자 3님, 댓글 감사합니다.",
+        "isMine": true,
+        "author": {"id": 1, "name": "더미 작성자 1", "profileImageUrl": "https://placehold.co/36"}
+      },
+      {
+        "postId": 2,
+        "id": 3,
+        "createdAt": "2024-02-15 10:00:00",
+        "updatedAt": "2024-02-15 10:00:00",
+        "content": "자연은 정말 소중하죠!",
+        "isMine": true,
+        "author": {"id": 1, "name": "더미 작성자 1", "profileImageUrl": "https://placehold.co/36"}
+      },
+      {
+        "postId": 3,
+        "id": 4,
+        "createdAt": "2024-02-15 10:00:00",
+        "updatedAt": "2024-02-15 10:00:00",
+        "content": "지식 탐구는 끝이 없죠!",
+        "isMine": false,
+        "author": {"id": 4, "name": "더미 작성자 4", "profileImageUrl": "https://placehold.co/36"}
+      },
+      {
+        "postId": 3,
+        "id": 5,
+        "createdAt": "2024-02-15 10:00:00",
+        "updatedAt": "2024-02-15 10:00:00",
+        "content": "흥미로운 주제입니다.",
+        "isMine": true,
+        "author": {"id": 1, "name": "더미 작성자 1", "profileImageUrl": "https://placehold.co/36"}
+      }
+    ]
+  }
+}
