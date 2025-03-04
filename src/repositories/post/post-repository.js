@@ -1,3 +1,5 @@
+import {handleError} from "../../core/error-handler.js";
+
 const PostRepository = {
     async getPosts() {
         try {
@@ -9,8 +11,7 @@ const PostRepository = {
             const json = await response.json();
             return json.data.posts;
         } catch (error) {
-            console.error(error);
-            throw error;
+            handleError(error);
         }
     },
     async getPost(postId) {
@@ -27,8 +28,7 @@ const PostRepository = {
 
 
         } catch (error) {
-            console.error(error);
-            throw error;
+            handleError(error);
         }
     },
     async getComments(postId) {
@@ -45,8 +45,7 @@ const PostRepository = {
 
 
         } catch (error) {
-            console.error(error);
-            throw error;
+            handleError(error);
         }
     }
 }
