@@ -1,19 +1,12 @@
 import Component from "../../../../core/component.js";
 
-const loadCSS = () => {
-    if (!document.querySelector("#post-form-style")) {
-        const link = document.createElement("link");
-        link.id = "post-form-style";
-        link.rel = "stylesheet";
-        link.href = "/pages/post/components/post-form/post-form.css";
-        document.head.appendChild(link);
-    }
-};
-
 export default class PostForm extends Component {
     setup() {
         this.state = { mode: this.props.mode , post: this.props.post }
-        loadCSS()
+        this.loadCSS(
+            "post-form-style",
+            "/pages/post/components/post-form/post-form.css",
+        )
     }
 
     template() {

@@ -1,15 +1,5 @@
 import Component from "../../core/component.js";
 
-const loadHeaderCSS = () => {
-    if (!document.querySelector("#header-style")) {
-        const link = document.createElement("link");
-        link.id = "header-style";
-        link.rel = "stylesheet";
-        link.href = "/components/header/header.css";
-        document.head.appendChild(link);
-    }
-};
-
 export default class Header extends  Component {
     setup() {
         this.state = {
@@ -17,7 +7,10 @@ export default class Header extends  Component {
             showProfile: this.props.showProfile,
             userProfileImage: this.props.userProfileImage,
         };
-        loadHeaderCSS()
+        this.loadCSS(
+            "header-style",
+            "/components/header/header.css"
+        );
     }
 
     template() {

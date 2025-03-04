@@ -1,19 +1,12 @@
 import Component from "../../../../core/component.js";
 
-const loadCSS = () => {
-    if (!document.querySelector("#comment-list-style")) {
-        const link = document.createElement("link");
-        link.id = "comment-list-style";
-        link.rel = "stylesheet";
-        link.href = "/pages/post/components/comment-list/comment-list.css";
-        document.head.appendChild(link);
-    }
-};
-
 export default class CommentList extends Component {
     setup() {
         this.state = {comments: this.props.comments};
-        loadCSS()
+        this.loadCSS(
+            "comment-list-style",
+            "/pages/post/components/comment-list/comment-list.css"
+        );
     }
 
     template() {

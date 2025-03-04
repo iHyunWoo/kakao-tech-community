@@ -28,4 +28,13 @@ export default class Component {
             callback(event);
         })
     }
+    loadCSS (id, href) {
+        if (!document.querySelector(`#${id}`)) {
+            const link = document.createElement('link');
+            link.id = id;
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
+        }
+    }
 }
