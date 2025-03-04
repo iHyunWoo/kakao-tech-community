@@ -1,24 +1,28 @@
+import {handleError} from "../../core/error-handler.js";
+import {CustomError, ERROR_TYPES} from "../../core/custom-error.js";
+
 const PostRepository = {
     async getPosts() {
         try {
-            const response = await fetch(`/dummy-data/post-dummy-data.json`)
+            const url = `/dummy-data/post-dummy-data.json`
+            const response = await fetch(url)
 
             if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+                throw new CustomError(ERROR_TYPES.NETWORK_ERROR, `${url} - ${response.status}`);
             }
             const json = await response.json();
             return json.data.posts;
         } catch (error) {
-            console.error(error);
-            throw error;
+            handleError(error.toString());
         }
     },
     async getPost(postId) {
         try {
-            const response = await fetch(`/dummy-data/post-dummy-data.json`)
+            const url = `/dummy-data/post-dummy-data.json`
+            const response = await fetch(url)
 
             if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+                throw new CustomError(ERROR_TYPES.NETWORK_ERROR, `${url} - ${response.status}`);
             }
 
             const json = await response.json();
@@ -27,16 +31,16 @@ const PostRepository = {
 
 
         } catch (error) {
-            console.error(error);
-            throw error;
+            handleError(error.toString());
         }
     },
     async getComments(postId) {
         try {
-            const response = await fetch(`/dummy-data/comment-dummy-data.json`)
+            const url = `/dummy-data/comment-dummy-data.json`
+            const response = await fetch(url)
 
             if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+                throw new CustomError(ERROR_TYPES.NETWORK_ERROR, `${url} - ${response.status}`);
             }
 
             const json = await response.json();
@@ -45,8 +49,7 @@ const PostRepository = {
 
 
         } catch (error) {
-            console.error(error);
-            throw error;
+            handleError(error.toString());
         }
     }
 }

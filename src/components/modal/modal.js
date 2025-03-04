@@ -1,22 +1,15 @@
 import Component from "../../core/component.js";
 
-const loadHeaderCSS = () => {
-    if (!document.querySelector("#modal-style")) {
-        const link = document.createElement("link");
-        link.id = "modal-style";
-        link.rel = "stylesheet";
-        link.href = "/components/modal/modal.css";
-        document.head.appendChild(link);
-    }
-};
-
 export default class Modal extends Component {
     setup() {
         this.state = {
             isOpen: false,
         }
 
-        loadHeaderCSS()
+        this.loadCSS(
+            "modal-style",
+            "/components/modal/modal.css",
+        );
     }
 
     template() {

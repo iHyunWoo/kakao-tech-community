@@ -1,20 +1,13 @@
 import Component from "../../../../core/component.js";
 
-const loadCSS = () => {
-    if (!document.querySelector("#post-detail-style")) {
-        const link = document.createElement("link");
-        link.id = "post-detail-style";
-        link.rel = "stylesheet";
-        link.href = "/pages/post/components/post-detail/post-detail.css";
-        document.head.appendChild(link);
-    }
-};
-
 export default class PostDetail extends Component {
     setup() {
         this.state = { post: this.props.post };
 
-        loadCSS();
+        this.loadCSS(
+            "post-detail-style",
+            "/pages/post/components/post-detail/post-detail.css",
+        )
     }
 
     template() {

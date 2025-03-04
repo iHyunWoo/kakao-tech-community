@@ -9,11 +9,10 @@
       document.addEventListener("DOMContentLoaded", () => {
         // 서버 구현 전 임시 구현
         const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-        if (isLoggedIn) {
+        if (isLoggedIn !== "true") {
           window.location.href = "pages/login/login-page.html";
         } else {
-          window.location.href = "pages/login/login-page.html";
+          window.location.href = "pages/post/post-list-page.html";
         }
       })
     </script>
