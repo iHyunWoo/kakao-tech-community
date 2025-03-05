@@ -1,56 +1,38 @@
-import Component from "../../core/component.js";
+import loadCSS from "/util/loadCSS.js";
 
-export default class Modal extends Component {
-    setup() {
-        this.state = {
-            isOpen: false,
-        }
+export default function Modal({ title = "", content = "", confirmText = "확인", onConfirm = null }) {
+    loadCSS("style/modal.css");
 
-        this.loadCSS(
-            "modal-style",
-            "/components/modal/modal.css",
-        );
-    }
+    const container = document.createElement("div");
+    container.classList.add("modal-overlay");
 
-    template() {
-        const { title = '', content = '', confirmText = '확인', onConfirm = null} = this.props;
-        const { isOpen } = this.state;
-
-        return `
-            <div class="modal-overlay ${isOpen ? 'active' : ''}">
-                <div class="modal-content">
-                    <h2 class="modal-title">${title}</h2>
-                    <div class="modal-body">${content}</div>
-                    <div class="modal-actions">
-                        <button class="modal-close">닫기</button>
-                        <button class="modal-confirm">${confirmText}</button>
-                    </div>
-                </div>
+    container.innerHTML = `
+        <div class="modal-content">
+            <h2 class="modal-title">${title}</h2>
+            <div class="modal-body">${content}</div>
+            <div class="modal-actions">
+                <button class="modal-close">닫기</button>
+                <button class="modal-confirm">${confirmText}</button>
             </div>
-        `;
+        </div>
+    `;
+
+    // 🔥 모달 열기 함수
+    function open() {
+        container.classList.add("active");
     }
 
-    setEvent() {
-        this.addEvent('click', '.modal-close',  () => {
-            this.close()
-        })
-
-        this.addEvent('click', '.modal-confirm',  () => {
-            if (this.props.onConfirm) this.props.onConfirm();
-            this.close()
-        })
+    // 🔥 모달 닫기 함수
+    function close() {
+        container.classList.remove("active");
     }
 
-    open() {
-        this.setState({ isOpen: true });
-    }
+    // 🔥 이벤트 리스너 추가
+    container.querySelector(".modal-close").addEventListener("click", close);
+    container.querySelector(".modal-confirm").addEventListener("click", () => {
+        if (onConfirm) onConfirm();
+        close();
+    });
 
-    close() {
-        // 닫기 시 애니메이션을 유지하며 숨김 처리
-        const overlay = this.$target.querySelector('.modal-overlay');
-        if (overlay) {
-            overlay.classList.remove('active');
-            this.setState({ isOpen: false });
-        }
-    }
+    return { container, open, close };
 }
