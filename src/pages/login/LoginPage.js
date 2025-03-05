@@ -8,6 +8,7 @@ export default function LoginPage() {
     loadCSS("/style/login-page.css")
 
     const container = document.createElement("div");
+    container.id = "container";
 
     container.innerHTML = `
      <div class="login-container">
