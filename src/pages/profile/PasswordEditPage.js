@@ -6,10 +6,9 @@ export default function PasswordEditPage() {
     loadCSS("style/password-edit-page.css");
 
     const container = document.createElement("div");
-    container.id = "password-edit-container";
+    container.id = "container";
 
     container.innerHTML = `
-        <div id="top-spacer"></div>
         <h2 id="password-edit-header">비밀번호 수정</h2>
 
         <label class="password-label" for="password">비밀번호*</label>
@@ -21,7 +20,6 @@ export default function PasswordEditPage() {
         <p class="password-alert-message" id="password-confirm-alert-message"></p>
 
         <input class="password-edit-button" type="submit" id="password-edit-submit-button" value="수정하기">
-        <div id="bottom-spacer"></div>
     `;
 
     // 비밀번호 확인 검증 함수

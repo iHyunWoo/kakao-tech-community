@@ -153,27 +153,27 @@ hr {
     color: #ffffff;
 }
 
-#comment-item {
+.comment-item {
     display: flex;
     flex-direction: column;
 
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 
 }
 
-#comment-top-section {
+.comment-top-section {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-#comment-user-date {
+.comment-user-date {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-#comment-user-image {
+.comment-user-image {
     width: 36px;
     height: 36px;
 
@@ -182,19 +182,19 @@ hr {
     margin-right: 10px;
 }
 
-#comment-user-name {
+.comment-user-name {
     font-weight: 700;
     font-size: 15px;
 
     margin-right: 24px;
 }
 
-#comment-date {
+.comment-date {
     font-weight: 400;
     font-size: 14px;
 }
 
-#comment-edit-delete-button {
+.comment-edit-delete-button {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -202,7 +202,7 @@ hr {
     gap: 6px;
 }
 
-#comment-comment {
+.comment-comment {
     margin-left: 46px;
     margin-top: 8px;
 }

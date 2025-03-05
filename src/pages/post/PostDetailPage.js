@@ -10,6 +10,7 @@ export default function PostDetailPage(postId) {
     loadCSS("/style/post-detail-page.css")
 
     const container = document.createElement("div");
+    container.id = "container";
 
     // 전체 화면
     container.innerHTML = `

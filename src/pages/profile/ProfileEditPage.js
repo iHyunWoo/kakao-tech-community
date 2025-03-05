@@ -5,7 +5,7 @@ export default function ProfileEditPage() {
     loadCSS("style/profile-edit-page.css");
 
     const container = document.createElement("div");
-    container.id = "profile-edit-container";
+    container.id = "container";
 
     container.innerHTML = `
         <h2 id="profile-edit-header">회원정보 수정</h2>
@@ -30,7 +30,7 @@ export default function ProfileEditPage() {
         <button id="profile-edit-submit-edit-button">수정완료</button>
     `;
 
-    // 🔥 회원 탈퇴 모달 생성
+    // 회원 탈퇴 모달 생성
     const deleteAccountModal = Modal({
         title: "회원탈퇴 하시겠습니까?",
         content: "작성된 게시글과 댓글은 삭제됩니다.",
@@ -40,9 +40,9 @@ export default function ProfileEditPage() {
         }
     });
 
-    container.appendChild(deleteAccountModal.container); // ✅ 모달을 추가
+    container.appendChild(deleteAccountModal.container);
 
-    // 🔥 프로필 이미지 변경 이벤트 처리
+    // 프로필 이미지 변경 이벤트 처리
     const profileImageInput = container.querySelector("#profile-edit-profile-image-input");
     const profileImage = container.querySelector("#profile-edit-profile-image");
     const profileImageEditButton = container.querySelector("#profile-edit-profile-image-edit-button");
@@ -60,7 +60,7 @@ export default function ProfileEditPage() {
         }
     });
 
-    // 🔥 회원 탈퇴 버튼 이벤트 처리
+    // 회원 탈퇴 버튼 이벤트 처리
     container.querySelector("#profile-edit-delete-account-button").addEventListener("click", () => {
         deleteAccountModal.open();
     });
