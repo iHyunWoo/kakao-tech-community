@@ -9,7 +9,7 @@ class CustomError extends Error {
     }
 
     toString() {
-        return `[${this.code}] ${this.message} ${this.detail}`;
+        return `${this.message}: ${this.detail}`;
     }
 }
 
