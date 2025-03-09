@@ -20,22 +20,13 @@ function updateHeader(currentPath) {
     const headerContainer = document.querySelector("#header-container");
     headerContainer.innerHTML = ""; // 기존 헤더 제거
 
-    let showBackButton;
-    let showProfile;
+    const headerConfig = {
+        [ROUTES.LOGIN]: { showBackButton: false, showProfile: false },
+        [ROUTES.SIGNUP]: { showBackButton: true, showProfile: false },
+        [ROUTES.POSTS]: { showBackButton: false, showProfile: true },
+    };
 
-    if (currentPath === ROUTES.LOGIN) {
-        showBackButton = false;
-        showProfile = false; // 로그인, 회원가입에서는 프로필 버튼 숨김
-    } else if (currentPath === ROUTES.SIGNUP) {
-        showBackButton = true;
-        showProfile = false;
-    } else if (currentPath === ROUTES.POSTS) {
-        showBackButton = false;
-        showProfile = true;
-    } else {
-        showBackButton = true;
-        showProfile = true;
-    }
+    const { showBackButton = true, showProfile = true } = headerConfig[currentPath] || {};
 
     headerContainer.appendChild(Header({ showBackButton, showProfile }));
 }
