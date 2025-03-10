@@ -1,61 +1,104 @@
 import loadCSS from "../../util/loadCSS.js";
-import {deletePost, getPost} from "../../api/postApi.js";
+import { deletePost, getPost } from "../../api/postApi.js";
 import Modal from "../../components/modal/modal.js";
-import {navigateTo} from "../../util/navigateTo.js";
-import {ROUTES} from "../../constants/routes.js";
-import {getComments, deleteComment} from "../../api/commentApi.js";
+import { navigateTo } from "../../util/navigateTo.js";
+import { ROUTES } from "../../constants/routes.js";
+import { getComments, deleteComment } from "../../api/commentApi.js";
+import CommentListItem from "./component/CommentListItem.js";
 
 export default function PostDetailPage(postId) {
-    loadCSS("/style/index.css")
-    loadCSS("/style/post-detail-page.css")
+    loadCSS("/style/index.css");
+    loadCSS("/style/post-detail-page.css");
 
     const container = document.createElement("div");
     container.id = "container";
 
-    // 전체 화면
-    container.innerHTML = `
-    <div id="post-detail-section"></div>
-    <div id="comment-section">
-      <div id="comment-write-div">
-        <label>
-          <textarea id="comment-editor" placeholder="댓글을 남겨주세요!"></textarea>
-        </label>
-        <hr>
-        <button id="comment-write-button">댓글 등록</button>
-      </div>
-      <div id="comment-list"></div>
-    </div>
-    <div id="modal"></div>
-  `;
+    let cursor = null;
+    let isLoading = false;
+    let hasNextPage = true;
 
-    // 게시글 삭제 모달
+    container.innerHTML = `
+        <div id="post-detail-section"></div>
+        <div id="comment-section">
+          <div id="comment-write-div">
+            <label><textarea id="comment-editor" placeholder="댓글을 남겨주세요!"></textarea></label>
+            <hr>
+            <button id="comment-write-button">댓글 등록</button>
+          </div>
+          <div id="comment-list"></div>
+        </div>
+        <div id="modal"></div>
+    `;
+
+    const $postDetailSection = container.querySelector("#post-detail-section");
+    const $commentList = container.querySelector("#comment-list");
+
     const deletePostModal = Modal({
         title: "게시글을 삭제하시겠습니까?",
         content: "삭제한 내용은 복구할 수 없습니다.",
         confirmText: "확인",
-        onConfirm: async () => {
-            await handleDeletePost(postId);
-        }
+        onConfirm: async () => await handleDeletePost(postId),
     });
 
-    // 댓글 삭제 모달
     const deleteCommentModal = Modal({
         title: "댓글을 삭제하시겠습니까?",
         content: "삭제한 내용은 복구할 수 없습니다.",
         confirmText: "확인",
-        onConfirm: async (commentId) => {
-            await handleDeleteComment(commentId);
-        }
+        onConfirm: async (commentId) => await handleDeleteComment(commentId),
     });
 
-    // 모달을 container에 추가
     container.appendChild(deletePostModal.container);
     container.appendChild(deleteCommentModal.container);
 
-    // 게시글 삭제 API 호출
+    // 게시글 렌더링
+    async function renderPost() {
+        try {
+            const response = await getPost(postId);
+            const post = response.data;
+
+
+            if (!post) {
+                $postDetailSection.innerHTML = `<p>게시글을 찾을 수 없습니다.</p>`;
+                return;
+            }
+            $postDetailSection.innerHTML = createPostTemplate(post);
+            attachPostEvents(post);
+        } catch (error) {
+            console.error("게시글 조회 실패:", error);
+        }
+    }
+
+    // 댓글 로드
+    async function loadMoreComments() {
+        if (isLoading || !hasNextPage) return;
+        isLoading = true;
+
+        try {
+            const { data } = await getComments(postId, cursor);
+            const comments = data.comments
+            if (comments.length === 0 && !cursor) {
+                hasNextPage = false;
+                return;
+            }
+
+            comments.forEach(comment => {
+                const commentItem = CommentListItem(comment, { onDelete: handleDeleteComment });
+                $commentList.appendChild(commentItem);
+            });
+            const nextCursor = comments[comments.length - 1].id;
+            cursor = nextCursor;
+            if (!nextCursor) hasNextPage = false; // 다음 페이지 없으면 종료
+        } catch (error) {
+            console.error("댓글 로드 실패:", error);
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    // 게시글 삭제
     async function handleDeletePost(postId) {
         try {
-            const response = await deletePost(postId);
+            await deletePost(postId);
             alert("게시글이 삭제되었습니다.");
             navigateTo(ROUTES.POSTS);
         } catch (error) {
@@ -63,52 +106,42 @@ export default function PostDetailPage(postId) {
         }
     }
 
-    // 댓글 삭제 API 호출
+    // 댓글 삭제
     async function handleDeleteComment(commentId) {
         try {
-            const response = await deleteComment(commentId);
+            await deleteComment(commentId);
             alert("댓글이 삭제되었습니다.");
-            await renderPost(); // 댓글 목록 갱신
+            $commentList.innerHTML = ""; // 초기화
+            cursor = null;
+            hasNextPage = true;
+            await loadMoreComments(); // 새로 로드
         } catch (error) {
             console.error("댓글 삭제 실패:", error);
         }
     }
 
-    // 화면에 게시글 및 댓글을 렌더링
-    async function renderPost() {
-        const [post, comments] = await Promise.all([
-            getPost(postId),
-            getComments(postId)
-        ]);
-
-        if (!post) {
-            container.querySelector("#post-detail-section").innerHTML = `<p>게시글을 찾을 수 없습니다.</p>`;
-            container.querySelector("#comment-list").innerHTML = "";
-            return;
-        }
-
-        // 게시글 상세 영역 업데이트
-        container.querySelector("#post-detail-section").innerHTML = `
+    // 게시글 템플릿
+    function createPostTemplate(post) {
+        return `
         <div id="post-detail">
             <div id="top-section">
                 <h2 id="post-title">${post.title}</h2>
                 <div id="post-info">
                     <div id="post-user">
-                        <img id="post-user-image" src="${post.author.profileImageUrl}" alt="">
-                        <p id="post-user-name">${post.author.name}</p>
+                        <img id="post-user-image" src="${post.user.profileImageUrl}" alt="">
+                        <p id="post-user-name">${post.user.nickname}</p>
                         <p id="post-created-at">${post.createdAt}</p>
                     </div>
                     ${post.isMine ? `
-                        <div id="edit-delete-button">
-                            <button class="edit-delete-button" id="edit-button">수정</button>
-                            <button class="edit-delete-button" id="delete-button">삭제</button>
-                        </div>
-                    ` : ""}
+                    <div>
+                        <button class="edit-delete-button" id="edit-button">수정</button>
+                        <button  class="edit-delete-button" id="delete-button">삭제</button>
+                    </div>` : ""}
                 </div>
             </div>
             <hr>
             <div id="content-section">
-                ${post.imageUrl ? `<img id="content-image" src="${post.imageUrl}" alt="">` : ""}
+                ${post.imageUrl ? `<img src="${post.imageUrl}" alt="">` : ""}
                 <p id="content-text">${post.content}</p>
                 <div id="content-stats">
                     <div class="content-stats" id="content-like-stat">
@@ -125,59 +158,31 @@ export default function PostDetailPage(postId) {
                     </div>
                 </div>
             </div>
-            <hr>
-        </div>
-        `;
-
-        // 댓글 목록 영역 업데이트
-        container.querySelector("#comment-list").innerHTML = `
-            ${comments.length > 0 ? comments.map(comment => `
-            <div class="comment-item">
-              <div class="comment-top-section">
-                <div class="comment-user-date">   
-                  <img class="comment-user-image" src="${comment.author.profileImageUrl}" alt="">
-                  <p class="comment-user-name">${comment.author.name}</p>
-                  <p class="comment-date">${comment.createdAt}</p>
-                </div>
-                ${comment.isMine ? `
-                  <div class="comment-edit-delete-button">
-                    <button class="comment-edit-button">수정</button>
-                    <button class="comment-delete-button" data-comment-id="${comment.id}">삭제</button>
-                  </div>
-                ` : ""}
-                </div>
-                <p class="comment-comment">${comment.content}</p>
-            </div>
-            `).join("")
-            : `<p>댓글이 없습니다.</p>`
-            }
-        `;
-
-        // post 수정 버튼
-        const editButton = container.querySelector("#edit-button");
-        if (editButton) {
-            editButton.addEventListener("click", () => {
-                navigateTo(ROUTES.POST_FORM(postId))
-            });
-        }
-        // post 삭제 버튼
-        const deleteButton = container.querySelector("#delete-button");
-        if (deleteButton) {
-            deleteButton.addEventListener("click", () => {
-                deletePostModal.open();
-            });
-        }
-        // 댓글 삭제 버튼
-        container.querySelectorAll(".comment-delete-button").forEach(button => {
-            button.addEventListener("click", (e) => {
-                const commentId = e.currentTarget.getAttribute("data-comment-id");
-                deleteCommentModal.open(commentId);
-            });
-        });
+        </div>`;
     }
 
+    // 게시글 이벤트
+    function attachPostEvents(post) {
+        const editButton = container.querySelector("#edit-button");
+        const deleteButton = container.querySelector("#delete-button");
 
+        if (editButton) editButton.addEventListener("click", () => navigateTo(ROUTES.POST_FORM(postId)));
+        if (deleteButton) deleteButton.addEventListener("click", () => deletePostModal.open());
+    }
+
+    // 무한 스크롤 감지
+    function handleScroll() {
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        if (scrollTop + clientHeight >= scrollHeight - 100) {
+            loadMoreComments();
+        }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    // 초기 렌더링
     renderPost();
+    loadMoreComments();
 
     return container;
 }
