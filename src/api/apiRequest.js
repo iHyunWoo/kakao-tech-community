@@ -1,6 +1,6 @@
 export async function apiRequest(endpoint, method = "GET", body = null) {
     try {
-        const response = await fetch(`http://localhost:8080/api${endpoint}`, {
+        const response = await fetch(`https://lizard-thorough-deadly.ngrok-free.app/api${endpoint}`, {
             method,
             headers: {
                 "Content-Type": "application/json",
