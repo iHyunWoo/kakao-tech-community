@@ -2,6 +2,7 @@ import loadCSS from "../../util/loadCSS.js";
 import { ROUTES } from "../../constants/routes.js";
 import { navigateTo } from "../../util/navigateTo.js";
 import { getPosts } from "../../api/postApi.js";
+import PostListItem from "./component/PostListItem.js";
 
 export default function PostListPage() {
     loadCSS("/style/index.css");
@@ -33,7 +34,6 @@ export default function PostListPage() {
             const { data } = await getPosts(cursor); // 커서 기반 데이터 가져오기
             const posts = data.posts
             if (posts.length === 0 && !cursor) {
-                renderEmptyMessage($postList);
                 hasNextPage = false;
                 return;
             }
@@ -48,6 +48,14 @@ export default function PostListPage() {
         } finally {
             isLoading = false;
         }
+    }
+
+    // 받아온 post를 렌더링
+    function addPostList(posts, $postList) {
+        posts.forEach(post => {
+            const $postItem = PostListItem(post);
+            $postList.appendChild($postItem);
+        });
     }
 
     // 무한 스크롤 감지
@@ -72,41 +80,4 @@ export default function PostListPage() {
     fetchPosts(); // 초기 데이터 불러오기
 
     return $container;
-}
-
-function addPostList(posts, $postList) {
-    posts.forEach(post => {
-        const $postItem = createPostItem(post);
-        $postList.appendChild($postItem);
-    });
-}
-
-/* 게시글 없을 때 메시지 */
-function renderEmptyMessage($postList) {
-    $postList.innerHTML = `<p>게시글이 없습니다.</p>`;
-}
-
-function createPostItem(post) {
-    const $postItem = document.createElement("div");
-    $postItem.className = "post-item";
-    $postItem.setAttribute("role", "button");
-    $postItem.setAttribute("data-id", post.id);
-    $postItem.innerHTML = `
-        <h2 class="post-title">${post.title}</h2>
-        <div class="post-stats-date">
-            <div class="post-stats">
-                좋아요 ${post.likeCount} 댓글 ${post.commentCount} 조회수 ${post.viewCount}
-            </div>
-            <p class="post-date">${post.createdAt}</p>
-        </div>
-        <hr class="post-hr">
-        <div class="post-user">
-            <img class="post-user-image" src="${post.user.profileImageUrl}" alt="프로필 이미지">
-            <p class="post-user-name">${post.user.nickname}</p>
-        </div>
-    `;
-    $postItem.addEventListener("click", () => {
-        navigateTo(ROUTES.POST_DETAIL(post.id));
-    });
-    return $postItem;
 }
