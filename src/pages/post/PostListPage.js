@@ -102,7 +102,7 @@ function createPostItem(post) {
         <hr class="post-hr">
         <div class="post-user">
             <img class="post-user-image" src="${post.user.profileImageUrl}" alt="프로필 이미지">
-            <p class="post-user-name">${post.user.name}</p>
+            <p class="post-user-name">${post.user.nickname}</p>
         </div>
     `;
     $postItem.addEventListener("click", () => {
