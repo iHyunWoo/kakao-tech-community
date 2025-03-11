@@ -8,6 +8,10 @@ export async function getComments(postId, cursor = null, limit = 10) {
     return apiRequest(url, "GET", null)
 }
 
-export async function deleteComment(commentId) {
+export async function createComment(postId, content) {
+    return apiRequest(`/posts/${postId}/comments`, "POST", {content})
+}
 
+export async function deleteComment(postId, commentId) {
+    return apiRequest(`/posts/${postId}/comments/${commentId}`, "DELETE")
 }

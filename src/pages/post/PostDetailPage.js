@@ -3,7 +3,7 @@ import { deletePost, getPost } from "../../api/postApi.js";
 import Modal from "../../components/modal/modal.js";
 import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
-import { getComments, deleteComment } from "../../api/commentApi.js";
+import {getComments, deleteComment, createComment} from "../../api/commentApi.js";
 import CommentListItem from "./component/CommentListItem.js";
 
 export default function PostDetailPage(postId) {
@@ -32,6 +32,8 @@ export default function PostDetailPage(postId) {
 
     const $postDetailSection = container.querySelector("#post-detail-section");
     const $commentList = container.querySelector("#comment-list");
+    const $commentEditor = container.querySelector("#comment-editor");
+    const $commentWriteButton = container.querySelector("#comment-write-button");
 
     const deletePostModal = Modal({
         title: "게시글을 삭제하시겠습니까?",
@@ -62,7 +64,7 @@ export default function PostDetailPage(postId) {
                 return;
             }
             $postDetailSection.innerHTML = createPostTemplate(post);
-            attachPostEvents(post);
+            bindPostEvents();
         } catch (error) {
             console.error("게시글 조회 실패:", error);
         }
@@ -106,10 +108,32 @@ export default function PostDetailPage(postId) {
         }
     }
 
+    // 댓글 작성
+    async function handleWriteComment() {
+        const content = $commentEditor.value.trim();
+        if (!content) {
+            alert("댓글을 입력해주세요.");
+            return;
+        }
+
+        try {
+            await createComment(postId, content); // 댓글 작성 API 호출
+            alert("댓글이 등록되었습니다.");
+            // 초기화 후 다시 로드
+            $commentEditor.value = "";
+            $commentList.innerHTML = "";
+            cursor = null;
+            hasNextPage = true;
+            await loadMoreComments();
+        } catch (error) {
+            console.error("댓글 등록 실패:", error);
+        }
+    }
+
     // 댓글 삭제
     async function handleDeleteComment(commentId) {
         try {
-            await deleteComment(commentId);
+            await deleteComment(postId, commentId);
             alert("댓글이 삭제되었습니다.");
             $commentList.innerHTML = ""; // 초기화
             cursor = null;
@@ -162,7 +186,7 @@ export default function PostDetailPage(postId) {
     }
 
     // 게시글 이벤트
-    function attachPostEvents(post) {
+    function bindPostEvents() {
         const editButton = container.querySelector("#edit-button");
         const deleteButton = container.querySelector("#delete-button");
 
@@ -179,6 +203,7 @@ export default function PostDetailPage(postId) {
     }
 
     window.addEventListener("scroll", handleScroll);
+    $commentWriteButton.addEventListener("click", handleWriteComment);
 
     // 초기 렌더링
     renderPost();
