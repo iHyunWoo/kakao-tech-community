@@ -1,5 +1,5 @@
 import loadCSS from "../../util/loadCSS.js";
-import { deletePost, getPost } from "../../api/postApi.js";
+import {deletePost, getPost, togglePostLike} from "../../api/postApi.js";
 import Modal from "../../components/modal/modal.js";
 import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
@@ -16,6 +16,7 @@ export default function PostDetailPage(postId) {
     let cursor = null;
     let isLoading = false;
     let hasNextPage = true;
+    let currentPost;
 
     container.innerHTML = `
         <div id="post-detail-section"></div>
@@ -57,7 +58,7 @@ export default function PostDetailPage(postId) {
         try {
             const response = await getPost(postId);
             const post = response.data;
-
+            currentPost = post;
 
             if (!post) {
                 $postDetailSection.innerHTML = `<p>게시글을 찾을 수 없습니다.</p>`;
@@ -65,6 +66,7 @@ export default function PostDetailPage(postId) {
             }
             $postDetailSection.innerHTML = createPostTemplate(post);
             bindPostEvents();
+            updateLikeUI(post.isLiked, post.likeCount)
         } catch (error) {
             console.error("게시글 조회 실패:", error);
         }
@@ -169,7 +171,7 @@ export default function PostDetailPage(postId) {
                 <p id="content-text">${post.content}</p>
                 <div id="content-stats">
                     <div class="content-stats" id="content-like-stat">
-                        <p>${post.likeCount}</p>
+                        <p id="content-like-stat-count">${post.likeCount}</p>
                         <p>좋아요</p>
                     </div>
                     <div class="content-stats" id="content-view-stat">
@@ -185,13 +187,40 @@ export default function PostDetailPage(postId) {
         </div>`;
     }
 
+    // 좋아요 토글
+    async function handleLikeToggle() {
+        const response = await togglePostLike(postId);
+        if (response) {
+            const isLiked = response.data
+            currentPost.likeCount += isLiked ? 1 : -1;
+            updateLikeUI(isLiked, currentPost.likeCount)
+        }
+    }
+
+    // 좋아요 결과 렌더링
+    function updateLikeUI(isLiked, likeCount) {
+        const likeStat = container.querySelector("#content-like-stat");
+        const likeCountEl = likeStat.querySelector("#content-like-stat-count");
+
+        likeCountEl.textContent = likeCount; // 숫자 갱신
+
+        // 클래스 토글
+        if (isLiked) {
+            likeStat.classList.add("liked");
+        } else {
+            likeStat.classList.remove("liked");
+        }
+    }
+
     // 게시글 이벤트
     function bindPostEvents() {
-        const editButton = container.querySelector("#edit-button");
-        const deleteButton = container.querySelector("#delete-button");
+        const $editButton = container.querySelector("#edit-button");
+        const $deleteButton = container.querySelector("#delete-button");
+        const $likeStat = container.querySelector("#content-like-stat");
 
-        if (editButton) editButton.addEventListener("click", () => navigateTo(ROUTES.POST_FORM(postId)));
-        if (deleteButton) deleteButton.addEventListener("click", () => deletePostModal.open());
+        $editButton.addEventListener("click", () => navigateTo(ROUTES.POST_FORM(postId)));
+        $deleteButton.addEventListener("click", () => deletePostModal.open());
+        $likeStat.addEventListener("click", () => handleLikeToggle());
     }
 
     // 무한 스크롤 감지

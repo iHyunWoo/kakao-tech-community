@@ -25,3 +25,7 @@ export async function updatePost(postId, title, content, imageUrl) {
 export async function deletePost(postId) {
     return apiRequest(`/posts/${postId}`, "DELETE")
 }
+
+export async function togglePostLike(postId) {
+    return apiRequest(`/posts/${postId}/likes`, "POST")
+}
