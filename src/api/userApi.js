@@ -13,3 +13,7 @@ export async function login(email, password) {
 export async function logout() {
     return apiRequest("/users/token", "DELETE");
 }
+
+export async function getUserInfo() {
+    return apiRequest("/users/me", "GET");
+}

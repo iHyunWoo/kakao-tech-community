@@ -2,7 +2,7 @@ import loadCSS from "../../util/loadCSS.js";
 import {navigateTo} from "../../util/navigateTo.js";
 import {ROUTES} from "../../constants/routes.js";
 import {validateEmail, validatePassword} from "../../util/validators.js";
-import {login} from "../../api/userApi.js";
+import {getUserInfo, login} from "../../api/userApi.js";
 
 export default function LoginPage() {
     loadCSS("/style/index.css")
@@ -67,6 +67,11 @@ export default function LoginPage() {
     async function handleLogin(email, password) {
         try {
             await login(email, password);
+            const userInfoResponse = await getUserInfo();
+            const userInfo = userInfoResponse.data;
+            if (userInfo) {
+                localStorage.setItem("user", JSON.stringify(userInfo));
+            }
             alert("로그인 성공!");
             navigateTo(ROUTES.POSTS); // 게시판으로 이동
         } catch (error) {

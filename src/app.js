@@ -27,8 +27,9 @@ function updateHeader(currentPath) {
     };
 
     const { showBackButton = true, showProfile = true } = headerConfig[currentPath] || {};
-
-    headerContainer.appendChild(Header({ showBackButton, showProfile }));
+    const userInfo = JSON.parse(localStorage.getItem("user")) || {};
+    const profileImage = userInfo.profileImageUrl || "https://placehold.co/36";
+    headerContainer.appendChild(Header({ showBackButton, showProfile, profileImage }));
 }
 
 // 라우트 설정

@@ -2,7 +2,7 @@ import loadCSS from "/util/loadCSS.js";
 import {navigateTo} from "/util/navigateTo.js";
 import { ROUTES } from "/constants/routes.js";
 
-export default function Header({ showBackButton = false, showProfile = true, userProfileImage = "https://placehold.co/36" }) {
+export default function Header({ showBackButton = false, showProfile = true, userProfileImage }) {
     loadCSS("style/header.css");
 
     const container = document.createElement("header");
