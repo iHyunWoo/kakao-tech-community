@@ -1,5 +1,8 @@
 import loadCSS from "../../util/loadCSS.js";
 import {validatePassword} from "../../util/validators.js";
+import {updatePassword} from "../../api/userApi.js";
+import {navigateTo} from "../../util/navigateTo.js";
+import {ROUTES} from "../../constants/routes.js";
 
 export default function PasswordEditPage() {
     loadCSS("/style/index.css")
@@ -28,7 +31,7 @@ export default function PasswordEditPage() {
     }
 
     // 비밀번호 수정 처리
-    function handlePasswordEdit() {
+    async function handlePasswordEdit() {
         const password = container.querySelector("#password").value.trim();
         const passwordConfirm = container.querySelector("#password-confirm").value.trim();
         const passwordAlert = container.querySelector("#password-alert-message");
@@ -60,10 +63,15 @@ export default function PasswordEditPage() {
         }
         passwordConfirmAlert.style.visibility = "hidden";
 
-        alert("비밀번호가 수정되었습니다!");
+        try {
+            await updatePassword(password);
+            alert("비밀번호가 수정되었습니다!");
+            navigateTo(ROUTES.POSTS); // 게시판으로 이동
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
-    // 🔥 수정하기 버튼 이벤트 리스너 추가
     container.querySelector("#password-edit-submit-button").addEventListener("click", handlePasswordEdit);
 
     return container;

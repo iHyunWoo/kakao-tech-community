@@ -111,8 +111,7 @@
 }
 
 #profile-edit-submit-edit-button {
-    width: 102px;
-    height: 46px;
+    height: 33px;
 
     color: #ffffff;
     font-size: 14px;
@@ -120,7 +119,7 @@
     text-align: center;
 
     background-color: #ACA0EB;
-    border-radius: 24px;
+    border-radius: 8px;
 
-    margin: 40px auto;
+    margin-top: 40px;
 }

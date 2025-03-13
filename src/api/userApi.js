@@ -17,3 +17,12 @@ export async function logout() {
 export async function getUserInfo() {
     return apiRequest("/users/me", "GET");
 }
+
+export async function updateUserInfo(nickname, profileImageUrl) {
+    const body = {nickname, profileImageUrl};
+    return apiRequest("/users/me", "PUT", body);
+}
+
+export async function updatePassword(password) {
+    return apiRequest("/users/me/password", "PUT", {password});
+}

@@ -1,8 +1,9 @@
 import loadCSS from "/util/loadCSS.js";
 import {navigateTo} from "/util/navigateTo.js";
-import { ROUTES } from "/constants/routes.js";
+import {ROUTES} from "/constants/routes.js";
+import {logout} from "../../api/userApi.js";
 
-export default function Header({ showBackButton = false, showProfile = true, userProfileImage }) {
+export default function Header({showBackButton = false, showProfile = true, userProfileImage}) {
     loadCSS("style/header.css");
 
     const container = document.createElement("header");
@@ -14,7 +15,7 @@ export default function Header({ showBackButton = false, showProfile = true, use
                 <button id="header-back-button">
                     <img width="48px" height="48px" src="/resources/back-arrow.svg" alt="뒤로 가기"/>
                 </button>
-            ` : "" }
+            ` : ""}
         </div>
         <h1 class="header-title">아무 말 대잔치</h1>
         <div class="header-right">
@@ -30,6 +31,12 @@ export default function Header({ showBackButton = false, showProfile = true, use
             ` : ""}
         </div>
     `;
+
+    async function handleLogout() {
+        await logout();
+        localStorage.removeItem('isLoggedIn');
+        navigateTo(ROUTES.LOGIN);
+    }
 
     // 이벤트 리스너 추가
     if (showBackButton) {
@@ -56,8 +63,7 @@ export default function Header({ showBackButton = false, showProfile = true, use
 
         // 로그아웃
         container.querySelector("#header-profile-dropdown-logout-button").addEventListener("click", () => {
-            localStorage.removeItem('isLoggedIn');
-            navigateTo(ROUTES.LOGIN);
+            handleLogout();
         });
     }
 

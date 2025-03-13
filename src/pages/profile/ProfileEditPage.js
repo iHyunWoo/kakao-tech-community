@@ -1,8 +1,11 @@
 import loadCSS from "../../util/loadCSS.js";
-import Modal from "../../components/modal/modal.js";
+import { updateUserInfo } from "../../api/userApi.js";
+import { navigateTo } from "../../util/navigateTo.js";
+import { ROUTES } from "../../constants/routes.js";
 
 export default function ProfileEditPage() {
-    loadCSS("style/profile-edit-page.css");
+    loadCSS("/style/index.css");
+    loadCSS("/style/profile-edit-page.css");
 
     const container = document.createElement("div");
     container.id = "container";
@@ -20,50 +23,86 @@ export default function ProfileEditPage() {
         </div>
 
         <p class="profile-edit-title">이메일</p>
-        <p id="profile-edit-email">jrwedo7@gmail.com</p>
+        <p id="profile-edit-email">-</p>
 
         <p class="profile-edit-title">닉네임</p>
-        <input id="profile-edit-nickname-input" type="text" value="kevin.joung">
-        <button id="profile-edit-nickname-edit-button">닉네임 수정하기</button>
+        <input id="profile-edit-nickname-input" type="text" value="-">
+<!--        <button id="profile-edit-nickname-edit-button">닉네임 수정하기</button>-->
 
-        <button id="profile-edit-delete-account-button">회원 탈퇴</button>
         <button id="profile-edit-submit-edit-button">수정완료</button>
+        <button id="profile-edit-delete-account-button">회원 탈퇴</button>
     `;
 
-    // 회원 탈퇴 모달 생성
-    const deleteAccountModal = Modal({
-        title: "회원탈퇴 하시겠습니까?",
-        content: "작성된 게시글과 댓글은 삭제됩니다.",
-        confirmText: "확인",
-        onConfirm: () => {
-            console.log("회원 탈퇴 요청");
-        }
-    });
+    const $nicknameInput = container.querySelector("#profile-edit-nickname-input");
+    const $imageInput = container.querySelector("#profile-edit-profile-image-input");
+    const $imageEditButton = container.querySelector("#profile-edit-profile-image-edit-button");
+    const $imagePreview = container.querySelector("#profile-edit-profile-image");
+    const $email = container.querySelector("#profile-edit-email");
+    const $submitButton = container.querySelector("#profile-edit-submit-edit-button");
 
-    container.appendChild(deleteAccountModal.container);
+    const userInfo = JSON.parse(localStorage.getItem("user"));
+    if (userInfo) {
+        $email.textContent = userInfo.email;
+        $nicknameInput.value = userInfo.nickname;
+        $imagePreview.src = userInfo.profileImageUrl;
+    }
 
-    // 프로필 이미지 변경 이벤트 처리
-    const profileImageInput = container.querySelector("#profile-edit-profile-image-input");
-    const profileImage = container.querySelector("#profile-edit-profile-image");
-    const profileImageEditButton = container.querySelector("#profile-edit-profile-image-edit-button");
+    let selectedImageUrl = ""; // 선택된 이미지 URL (임시)
 
-    profileImageEditButton.addEventListener("click", () => profileImageInput.click());
+    // 프로필 이미지 클릭 이벤트 (파일 선택 열기)
+    $imageEditButton.addEventListener("click", () => $imageInput.click());
 
-    profileImageInput.addEventListener("change", (e) => {
+    // 이미지 파일 선택 시 미리보기 변경
+    $imageInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                profileImage.src = e.target.result;
+                $imagePreview.src = e.target.result; // 미리보기 반영
+                selectedImageUrl = "https://placehold.co/600x400"; // 임시 고정 URL. 사진 업로드 구현 후 변경
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // 회원 탈퇴 버튼 이벤트 처리
-    container.querySelector("#profile-edit-delete-account-button").addEventListener("click", () => {
-        deleteAccountModal.open();
-    });
+    // 수정 완료
+    $submitButton.addEventListener("click", handleSubmit);
+
+    // 제출
+    async function handleSubmit() {
+        const nickname = $nicknameInput.value.trim();
+
+        // 닉네임 검증
+        if (!nickname) {
+            alert("닉네임을 입력해주세요.");
+            return;
+        }
+        if (nickname.includes(" ")) {
+            alert("닉네임에는 공백이 포함될 수 없습니다.");
+            return;
+        }
+        if (nickname.length > 10) {
+            alert("닉네임은 최대 10자까지 가능합니다.");
+            return;
+        }
+
+        const profileImageUrl = selectedImageUrl || "https://placehold.co/150";
+
+        try {
+            await updateUserInfo(nickname, profileImageUrl); // API 호출
+            alert("프로필이 수정되었습니다.");
+
+            // 로컬 유저 정보 갱신
+            const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+            userInfo.nickname = nickname;
+            userInfo.profileImageUrl = profileImageUrl;
+            localStorage.setItem("user", JSON.stringify(userInfo));
+
+            navigateTo(ROUTES.POSTS); // 게시판으로 이동
+        } catch (error) {
+            alert(error.message);
+        }
+    }
 
     return container;
 }
