@@ -3,7 +3,7 @@ import {navigateTo} from "/util/navigateTo.js";
 import {ROUTES} from "/constants/routes.js";
 import {logout} from "../../api/userApi.js";
 
-export default function Header({showBackButton = false, showProfile = true, userProfileImage}) {
+export default function Header({showBackButton = false, showProfile = true, profileImage}) {
     loadCSS("style/header.css");
 
     const container = document.createElement("header");
@@ -21,7 +21,7 @@ export default function Header({showBackButton = false, showProfile = true, user
         <div class="header-right">
             ${showProfile ? `
                 <button id="header-profile-button">
-                    <img id="header-profile-image" width="36px" height="36px" src="${userProfileImage}" alt="프로필"/>
+                    <img id="header-profile-image" width="36px" height="36px" src="${profileImage}" alt="프로필"/>
                 </button>
                 <ul id="header-profile-dropdown-menu" class="hidden">
                     <li class="header-profile-dropdown-item" id="header-profile-dropdown-edit-profile-button">회원정보 수정</li>
