@@ -14,6 +14,8 @@
 }
 
 #post-title {
+    width: 100%;
+
     font-weight: 700;
     font-size: 24px;
 
@@ -21,6 +23,8 @@
 }
 
 #post-info {
+    width: 100%;
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
