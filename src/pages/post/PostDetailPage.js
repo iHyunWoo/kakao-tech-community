@@ -5,6 +5,7 @@ import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
 import {getComments, deleteComment, createComment} from "../../api/commentApi.js";
 import CommentListItem from "./component/CommentListItem.js";
+import {formatDateTime} from "../../util/dateUtil.js";
 
 export default function PostDetailPage(postId) {
     loadCSS("/style/index.css");
@@ -156,7 +157,7 @@ export default function PostDetailPage(postId) {
                     <div id="post-user">
                         <img id="post-user-image" src="${post.user.profileImageUrl}" alt="">
                         <p id="post-user-name">${post.user.nickname}</p>
-                        <p id="post-created-at">${post.createdAt}</p>
+                        <p id="post-created-at">${formatDateTime(post.createdAt)}</p>
                     </div>
                     ${post.isMine ? `
                     <div>

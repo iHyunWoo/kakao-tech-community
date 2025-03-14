@@ -1,5 +1,6 @@
 import {navigateTo} from "../../../util/navigateTo.js";
 import {ROUTES} from "../../../constants/routes.js";
+import {formatDateTime} from "../../../util/dateUtil.js";
 
 export default function PostListItem(post) {
     const $postItem = document.createElement("div");
@@ -12,7 +13,7 @@ export default function PostListItem(post) {
             <div class="post-stats">
                 좋아요 ${post.likeCount} 댓글 ${post.commentCount} 조회수 ${post.viewCount}
             </div>
-            <p class="post-date">${post.createdAt}</p>
+            <p class="post-date">${formatDateTime(post.createdAt)}</p>
         </div>
         <hr class="post-hr">
         <div class="post-user">

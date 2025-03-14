@@ -1,3 +1,5 @@
+import {formatDateTime} from "../../../util/dateUtil.js";
+
 export default function CommentListItem(comment, { onDelete }) {
     const isMineButtons = comment.isMine ? `
         <div class="comment-edit-delete-button">
@@ -13,7 +15,7 @@ export default function CommentListItem(comment, { onDelete }) {
                 <div class="comment-user-date">   
                     <img class="comment-user-image" src="${comment.user.profileImageUrl}" alt="">
                     <p class="comment-user-name">${comment.user.nickname}</p>
-                    <p class="comment-date">${comment.createdAt}</p>
+                    <p class="comment-date">${formatDateTime(comment.createdAt)}</p>
                 </div>
                 ${comment.isMine ? `
                 <div class="comment-edit-delete-button">
