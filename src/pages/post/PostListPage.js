@@ -33,7 +33,7 @@ export default function PostListPage() {
         try {
             const { data } = await getPosts(cursor); // 커서 기반 데이터 가져오기
             const posts = data.posts
-            if (posts.length === 0 && !cursor) {
+            if (posts.length === 0) {
                 hasNextPage = false;
                 return;
             }

@@ -80,7 +80,7 @@ export default function PostDetailPage(postId) {
         try {
             const { data } = await getComments(postId, cursor);
             const comments = data.comments
-            if (comments.length === 0 && !cursor) {
+            if (comments.length === 0) {
                 hasNextPage = false;
                 return;
             }
