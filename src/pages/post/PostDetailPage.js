@@ -168,7 +168,7 @@ export default function PostDetailPage(postId) {
             </div>
             <hr>
             <div id="content-section">
-                ${post.imageUrl ? `<img src="${post.imageUrl}" alt="">` : ""}
+                ${post.imageUrl ? `<img id="content-image" src="${post.imageUrl}" alt="">` : ""}
                 <p id="content-text">${post.content}</p>
                 <div id="content-stats">
                     <div class="content-stats" id="content-like-stat">
