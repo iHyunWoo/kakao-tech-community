@@ -3,8 +3,7 @@ import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
 import { validateEmail, validatePassword } from "../../util/validators.js";
 import { register } from "../../api/userApi.js";
-
-const defaultProfileImageUrl = "";
+import {uploadImageToImgBB} from "../../api/imgbbApi.js";
 
 export default function SignupPage() {
     loadCSS("/style/index.css");
@@ -66,6 +65,8 @@ export default function SignupPage() {
     const $passwordConfirmAlert = $container.querySelector("#password-confirm-alert-message");
     const $nicknameAlert = $container.querySelector("#nickname-alert-message");
 
+    let selectedImageFile = null;
+
     // 프로필 이미지 미리보기
     $profileImageButton.addEventListener("click", () => $profileImageInput.click());
     $profileImageInput.addEventListener("change", () => {
@@ -75,6 +76,7 @@ export default function SignupPage() {
             reader.onload = e => {
                 $profileImage.src = e.target.result;
                 $profileAlert.style.visibility = "hidden";
+                selectedImageFile = file;
             };
             reader.readAsDataURL(file);
         }
@@ -149,8 +151,19 @@ export default function SignupPage() {
         if (!checkProfileImage() || !checkEmail(email) || !checkPassword(password) ||
             !checkPasswordConfirm(password, passwordConfirm) || !checkNickname(nickname)) return;
 
+        let imageUrl = "";
+        // 이미지가 있다면 이미지 업로드
+        if (selectedImageFile) {
+            try {
+                imageUrl = await uploadImageToImgBB(selectedImageFile);
+            } catch (error) {
+                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.")
+                return;
+            }
+        }
+
         try {
-            await register(email, password, nickname, defaultProfileImageUrl);
+            await register(email, password, nickname, imageUrl);
             alert("회원가입이 완료되었습니다!");
             navigateTo(ROUTES.LOGIN); // 로그인 페이지로 이동
         } catch (error) {

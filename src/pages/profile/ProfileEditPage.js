@@ -2,6 +2,7 @@ import loadCSS from "../../util/loadCSS.js";
 import { updateUserInfo } from "../../api/userApi.js";
 import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
+import {uploadImageToImgBB} from "../../api/imgbbApi.js";
 
 export default function ProfileEditPage() {
     loadCSS("/style/index.css");
@@ -47,7 +48,7 @@ export default function ProfileEditPage() {
         $imagePreview.src = userInfo.profileImageUrl;
     }
 
-    let selectedImageUrl = ""; // 선택된 이미지 URL (임시)
+    let selectedImageFile = null;
 
     // 프로필 이미지 클릭 이벤트 (파일 선택 열기)
     $imageEditButton.addEventListener("click", () => $imageInput.click());
@@ -59,7 +60,7 @@ export default function ProfileEditPage() {
             const reader = new FileReader();
             reader.onload = function (e) {
                 $imagePreview.src = e.target.result; // 미리보기 반영
-                selectedImageUrl = "https://placehold.co/600x400"; // 임시 고정 URL. 사진 업로드 구현 후 변경
+                selectedImageFile = file;
             };
             reader.readAsDataURL(file);
         }
@@ -86,16 +87,25 @@ export default function ProfileEditPage() {
             return;
         }
 
-        const profileImageUrl = selectedImageUrl || "https://placehold.co/150";
+        let imageUrl = userInfo.profileImageUrl;
+        // 이미지가 있다면 이미지 업로드
+        if (selectedImageFile) {
+            try {
+                imageUrl = await uploadImageToImgBB(selectedImageFile);
+            } catch (error) {
+                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.")
+                return;
+            }
+        }
 
         try {
-            await updateUserInfo(nickname, profileImageUrl); // API 호출
+            await updateUserInfo(nickname, imageUrl);
             alert("프로필이 수정되었습니다.");
 
             // 로컬 유저 정보 갱신
             const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
             userInfo.nickname = nickname;
-            userInfo.profileImageUrl = profileImageUrl;
+            userInfo.profileImageUrl = imageUrl;
             localStorage.setItem("user", JSON.stringify(userInfo));
 
             navigateTo(ROUTES.POSTS); // 게시판으로 이동

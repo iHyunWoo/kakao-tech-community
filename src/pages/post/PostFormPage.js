@@ -2,6 +2,7 @@ import loadCSS from "../../util/loadCSS.js";
 import {createPost, getPost, updatePost} from "../../api/postApi.js";
 import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
+import {uploadImageToImgBB} from "../../api/imgbbApi.js";
 
 export default function PostForm({ mode, postId }) {
     loadCSS("/style/index.css");
@@ -10,6 +11,7 @@ export default function PostForm({ mode, postId }) {
     const container = document.createElement("div");
 
     let post = { title: "", content: "", imageUrl: "" };
+    let selectedImageFile = null;
 
     // 초기 데이터 로드
     async function loadPostData() {
@@ -57,14 +59,14 @@ export default function PostForm({ mode, postId }) {
         const $imageInput = container.querySelector("#post-form-image-input");
         const $imageName = container.querySelector("#post-form-image-name");
         const $submitButton = container.querySelector("#post-form-submit-button");
-        // 이미지 파일 선택 시 임시 이미지 URL 사용
         $imageInput.addEventListener("change", (e) => {
             const file = e.target.files[0];
             if (file) {
-                // 파일 선택 시 무조건 임시 URL 고정
-                $imageName.textContent = "https://placehold.co/600x400";
+                $imageName.textContent = file.name;
+                selectedImageFile = file;
             } else {
                 $imageName.textContent = "선택된 파일 없음";
+                selectedImageFile = null;
             }
         });
 
@@ -76,17 +78,27 @@ export default function PostForm({ mode, postId }) {
     async function handleSubmit() {
         const $titleInput = container.querySelector("#post-form-title-input");
         const $contentTextarea = container.querySelector("#post-form-content-textarea");
-        const $imageName = container.querySelector("#post-form-image-name");
 
         const title = $titleInput.value.trim();
         const content = $contentTextarea.value.trim();
-        const imageUrl = $imageName.textContent === "선택된 파일 없음" ? "" : $imageName.textContent;
 
         if (!title || !content) {
             alert("제목과 내용을 입력해주세요.");
             return;
         }
 
+        let imageUrl = post.imageUrl;
+        // 이미지가 있다면 이미지 업로드
+        if (selectedImageFile) {
+            try {
+                imageUrl = await uploadImageToImgBB(selectedImageFile);
+            } catch (error) {
+                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.")
+                return;
+            }
+        }
+
+        // 폼 제출
         try {
             if (mode === "create") {
                 await createPost(title, content, imageUrl);
