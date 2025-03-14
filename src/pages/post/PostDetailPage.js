@@ -66,7 +66,7 @@ export default function PostDetailPage(postId) {
                 return;
             }
             $postDetailSection.innerHTML = createPostTemplate(post);
-            bindPostEvents();
+            bindPostEvents(post);
             updateLikeUI(post.isLiked, post.likeCount)
         } catch (error) {
             console.error("게시글 조회 실패:", error);
@@ -214,14 +214,16 @@ export default function PostDetailPage(postId) {
     }
 
     // 게시글 이벤트
-    function bindPostEvents() {
-        const $editButton = container.querySelector("#edit-button");
-        const $deleteButton = container.querySelector("#delete-button");
+    function bindPostEvents(post) {
         const $likeStat = container.querySelector("#content-like-stat");
-
-        $editButton.addEventListener("click", () => navigateTo(ROUTES.POST_FORM(postId)));
-        $deleteButton.addEventListener("click", () => deletePostModal.open());
         $likeStat.addEventListener("click", () => handleLikeToggle());
+
+        if (post.isMine) {
+            const $editButton = container.querySelector("#edit-button");
+            const $deleteButton = container.querySelector("#delete-button");
+            $editButton.addEventListener("click", () => navigateTo(ROUTES.POST_FORM(postId)));
+            $deleteButton.addEventListener("click", () => deletePostModal.open());
+        }
     }
 
     // 무한 스크롤 감지
