@@ -1,9 +1,11 @@
+import CONFIG from "../config.js";
+
 export async function uploadImageToImgBB(imageFile) {
     const formData = new FormData();
     formData.append('image', imageFile);
     const expiration = 15552000  // 180일
-    const imagebbApiKey = import.meta.env.IMGBB_API_KEY || process.env.IMGBB_API_KEY;
-    const url = `https://api.imgbb.com/1/upload?expiration=${expiration}&key=${IMGBB_API_KEY}`;
+    const imagebbKey = CONFIG.IMGBB_API_KEY;
+    const url = `https://api.imgbb.com/1/upload?expiration=${expiration}&key=${imagebbKey}`;
 
     try {
         const response = await fetch(url, {
