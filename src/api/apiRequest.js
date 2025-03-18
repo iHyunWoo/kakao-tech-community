@@ -1,6 +1,6 @@
 export async function apiRequest(endpoint, method = "GET", body = null) {
     try {
-        const BASE_URL = process.env.BASE_URL;
+        const BASE_URL = import.meta.env.BASE_URL || process.env.BASE_URL;
         const response = await fetch(`${BASE_URL}${endpoint}`, {
             method,
             headers: {
