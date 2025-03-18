@@ -1,10 +1,8 @@
-import {IMGBB_API_KEY} from "../config.js";
-
 export async function uploadImageToImgBB(imageFile) {
     const formData = new FormData();
     formData.append('image', imageFile);
     const expiration = 15552000  // 180일
-
+    const imagebbApiKey = process.env.IMGBB_API_KEY;
     const url = `https://api.imgbb.com/1/upload?expiration=${expiration}&key=${IMGBB_API_KEY}`;
 
     try {
