@@ -1,3 +1,6 @@
 .idea/
 .DS_STORE
 config.js
+localhost.pem
+localhost-key.pem
+.vscode/
