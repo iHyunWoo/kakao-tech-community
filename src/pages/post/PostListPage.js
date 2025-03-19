@@ -14,6 +14,8 @@ export default class PostListPage extends Component {
         };
 
         this.loadCSS("/style/post-list-page.css");
+        this.fetchPosts(); // 초기 데이터 불러오기
+        this.addGlobalEvent("scroll", this.handleScroll.bind(this));  // 무한 스크롤 감지
     }
 
     template() {
@@ -27,10 +29,7 @@ export default class PostListPage extends Component {
         `;
     }
 
-    mounted() {
-        this.fetchPosts(); // 초기 데이터 불러오기
-        window.addEventListener("scroll", this.handleScroll.bind(this)); // 무한 스크롤 감지
-    }
+    mounted() {}
 
     setEvent() {
         this.addEvent("click", "#write-post-button", () => {
@@ -84,7 +83,6 @@ export default class PostListPage extends Component {
         if (this.state.isLoading || !this.state.hasNextPage) return;
 
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        console.log(scrollTop, scrollHeight, clientHeight)
         if (scrollTop + clientHeight >= scrollHeight - 100) { // 끝에서 100px 남기고 로드
             this.fetchPosts();
         }

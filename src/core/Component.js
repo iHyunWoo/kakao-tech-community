@@ -42,6 +42,10 @@ export default class Component {
         });
     }
 
+    addGlobalEvent(eventType, callback) {
+        window.addEventListener(eventType, callback);
+    }
+
     loadCSS(href) {
         if (document.querySelector(`link[href="${href}"]`)) return;
 
@@ -55,58 +59,28 @@ export default class Component {
         return this.$container;
     }
 
-    // initLoadingIndicator() {
-    //     if (!document.querySelector(".loading-overlay")) {
-    //         this.$loading = document.createElement("div");
-    //         this.$loading.className = "loading-overlay hidden";
-    //         this.$loading.innerHTML = `<div class="loading-spinner"></div>`;
-    //         document.body.appendChild(this.$loading);
-    //     } else {
-    //         this.$loading = document.querySelector(".loading-overlay");
-    //     }
-    // }
-    //
-    // showLoading() {
-    //     this.$loading.classList.remove("hidden");
-    // }
-    //
-    // hideLoading() {
-    //     this.$loading.classList.add("hidden");
-    // }
-    // 🔥 로딩 UI 추가
     initLoadingIndicator() {
-        setTimeout(() => {
-            if (!document.querySelector(".loading-overlay")) {
-                this.$loading = document.createElement("div");
-                this.$loading.className = "loading-overlay hidden";
-                this.$loading.innerHTML = `<div class="loading-spinner"></div>`;
-                document.body.appendChild(this.$loading);
-            } else {
-                this.$loading = document.querySelector(".loading-overlay");
-            }
-        }, 0);
+        if (!document.querySelector(".loading-overlay")) {
+            this.$loading = document.createElement("div");
+            this.$loading.className = "loading-overlay hidden";
+            this.$loading.innerHTML = `<div class="loading-spinner"></div>`;
+            document.body.appendChild(this.$loading);
+        } else {
+            this.$loading = document.querySelector(".loading-overlay");
+        }
     }
 
-    // 🔥 `requestAnimationFrame()`으로 UI 업데이트
     showLoading() {
-        requestAnimationFrame(() => {
-            if (this.$loading) {
-                this.$loading.classList.remove("hidden");
-                this.$loading.style.opacity = "1"; // 🔥 명시적으로 opacity 설정
-            } else {
-                console.warn("🚨 showLoading() 호출되었지만, this.$loading이 설정되지 않음.");
-            }
-        });
+        if (this.$loading) {
+            this.$loading.classList.remove("hidden");
+            this.$loading.classList.add("active");
+        }
     }
 
     hideLoading() {
-        requestAnimationFrame(() => {
-            if (this.$loading) {
-                this.$loading.style.opacity = "0"; // 🔥 애니메이션을 위해 opacity 먼저 변경
-                setTimeout(() => {
-                    this.$loading.classList.add("hidden");
-                }, 300); // 🔥 transition 시간 후 hidden 추가
-            }
-        });
+        if (this.$loading) {
+            this.$loading.classList.add("hidden");
+            this.$loading.classList.remove("active");
+        }
     }
 }

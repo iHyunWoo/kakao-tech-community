@@ -44,7 +44,7 @@ export default class PostDetailPage extends Component {
         const { post, isPostLoading } = this.state;
 
         return `
-        <div id="container">
+        <div id="post-detail-container">
             <div id="post-detail-section">
                 ${isPostLoading ? "" : post ? `
                 <div id="post-detail">

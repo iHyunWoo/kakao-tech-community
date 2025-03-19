@@ -22,7 +22,7 @@ export default class ProfileEditPage extends Component {
         const { nickname, email, profileImageUrl } = this.state;
 
         return `
-        <div id="container">
+        <div id="profile-edit-container">
             <h2 id="profile-edit-header">회원정보 수정</h2>
     
             <p class="profile-edit-title">프로필 사진*</p>

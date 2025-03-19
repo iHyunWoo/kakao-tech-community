@@ -22,7 +22,7 @@ export default class PasswordEditPage extends Component {
         const { password, passwordConfirm, errors } = this.state;
 
         return `
-        <div id="container">
+        <div id="password-edit-container">
             <h2 id="password-edit-header">비밀번호 수정</h2>
     
             <form id="password-edit-form">
