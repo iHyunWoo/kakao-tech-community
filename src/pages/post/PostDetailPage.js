@@ -106,6 +106,7 @@ export default class PostDetailPage extends Component {
     setEvent() {
         this.addEvent("click", "#comment-write-button", () => this.handleWriteComment());
         this.addEvent("click", "#content-like-stat", () => this.handleLikeToggle());
+        this.addEvent("click", "#edit-button", () => this.onEditPostPress());
         this.addEvent("click", "#delete-button", () => this.onDeletePostPress());
     }
 
@@ -205,6 +206,10 @@ export default class PostDetailPage extends Component {
             const updatedPost = { ...this.state.post, likeCount: this.state.post.likeCount + (isLiked ? 1 : -1), isLiked: isLiked };
             this.setState({ post: updatedPost });
         }
+    }
+
+    onEditPostPress() {
+        navigateTo(ROUTES.POST_FORM(this.state.postId))
     }
 
     onDeletePostPress() {
