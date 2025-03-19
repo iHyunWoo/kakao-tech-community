@@ -42,8 +42,8 @@ const routes = {
     [ROUTES.POSTS]: new PostListPage(),
     "/posts/:id": (params) => new PostDetailPage({ postId: params.id}),
     "/posts/form/:id?": (params) =>  new PostFormPage({ mode: params.id ? "update" : "create", postId: params.id }),
-    [ROUTES.PROFILE_EDIT]: ProfileEditPage,
-    [ROUTES.PASSWORD_EDIT]: PasswordEditPage,
+    [ROUTES.PROFILE_EDIT]: new ProfileEditPage(),
+    [ROUTES.PASSWORD_EDIT]: new PasswordEditPage(),
 };
 
 const router = new Router(routes, updateHeader);

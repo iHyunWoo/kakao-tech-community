@@ -1,77 +1,77 @@
-import loadCSS from "../../util/loadCSS.js";
 import { updateUserInfo } from "../../api/userApi.js";
 import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
 import {uploadImageToImgBB} from "../../api/imgbbApi.js";
+import Component from "../../core/Component.js";
 
-export default function ProfileEditPage() {
-    loadCSS("/style/index.css");
-    loadCSS("/style/profile-edit-page.css");
+export default class ProfileEditPage extends Component {
+    setup() {
+        const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
-    const container = document.createElement("div");
-    container.id = "container";
+        this.state = {
+            nickname: userInfo.nickname || "",
+            email: userInfo.email || "-",
+            profileImageUrl: userInfo.profileImageUrl || "https://placehold.co/150",
+            selectedImageFile: null,
+        };
 
-    container.innerHTML = `
-        <h2 id="profile-edit-header">회원정보 수정</h2>
-
-        <p class="profile-edit-title">프로필 사진*</p>
-        <div id="profile-image-container">
-            <input id="profile-edit-profile-image-input" type="file" accept="image/*" hidden>
-            <img id="profile-edit-profile-image" src="https://placehold.co/150" alt=""/>
-            <div id="profile-edit-profile-image-edit-button">
-                <p id="profile-edit-profile-image-edit-button-text">변경</p>
-            </div>
-        </div>
-
-        <p class="profile-edit-title">이메일</p>
-        <p id="profile-edit-email">-</p>
-
-        <p class="profile-edit-title">닉네임</p>
-        <input id="profile-edit-nickname-input" type="text" value="-">
-<!--        <button id="profile-edit-nickname-edit-button">닉네임 수정하기</button>-->
-
-        <button id="profile-edit-submit-edit-button">수정완료</button>
-        <button id="profile-edit-delete-account-button">회원 탈퇴</button>
-    `;
-
-    const $nicknameInput = container.querySelector("#profile-edit-nickname-input");
-    const $imageInput = container.querySelector("#profile-edit-profile-image-input");
-    const $imageEditButton = container.querySelector("#profile-edit-profile-image-edit-button");
-    const $imagePreview = container.querySelector("#profile-edit-profile-image");
-    const $email = container.querySelector("#profile-edit-email");
-    const $submitButton = container.querySelector("#profile-edit-submit-edit-button");
-
-    const userInfo = JSON.parse(localStorage.getItem("user"));
-    if (userInfo) {
-        $email.textContent = userInfo.email;
-        $nicknameInput.value = userInfo.nickname;
-        $imagePreview.src = userInfo.profileImageUrl;
+        this.loadCSS("/style/profile-edit-page.css");
     }
 
-    let selectedImageFile = null;
+    template() {
+        const { nickname, email, profileImageUrl } = this.state;
 
-    // 프로필 이미지 클릭 이벤트 (파일 선택 열기)
-    $imageEditButton.addEventListener("click", () => $imageInput.click());
+        return `
+        <div id="container">
+            <h2 id="profile-edit-header">회원정보 수정</h2>
+    
+            <p class="profile-edit-title">프로필 사진*</p>
+            <div id="profile-image-container">
+                <input id="profile-edit-profile-image-input" type="file" accept="image/*" hidden>
+                <img id="profile-edit-profile-image" src="${profileImageUrl}" alt=""/>
+                <div id="profile-edit-profile-image-edit-button">
+                    <p id="profile-edit-profile-image-edit-button-text">변경</p>
+                </div>
+            </div>
+    
+            <p class="profile-edit-title">이메일</p>
+            <p id="profile-edit-email">${email}</p>
+    
+            <p class="profile-edit-title">닉네임</p>
+            <input id="profile-edit-nickname-input" type="text" value="${nickname}">
+    
+            <button id="profile-edit-submit-edit-button">수정완료</button>
+            <button id="profile-edit-delete-account-button">회원 탈퇴</button>
+        </div>
+        `;
+    }
 
-    // 이미지 파일 선택 시 미리보기 변경
-    $imageInput.addEventListener("change", (e) => {
-        const file = e.target.files[0];
+    setEvent() {
+        this.addEvent("click", "#profile-edit-profile-image-edit-button", () => this.openFilePicker());
+        this.addEvent("change", "#profile-edit-profile-image-input", (e) => this.handleImageUpload(e));
+        this.addEvent("click", "#profile-edit-submit-edit-button", () => this.handleSubmit());
+    }
+
+    openFilePicker() {
+        this.$container.querySelector("#profile-edit-profile-image-input").click();
+    }
+
+    handleImageUpload(event) {
+        const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function (e) {
-                $imagePreview.src = e.target.result; // 미리보기 반영
-                selectedImageFile = file;
+            reader.onload = (e) => {
+                this.setState({
+                    profileImageUrl: e.target.result,
+                    selectedImageFile: file,
+                });
             };
             reader.readAsDataURL(file);
         }
-    });
+    }
 
-    // 수정 완료
-    $submitButton.addEventListener("click", handleSubmit);
-
-    // 제출
-    async function handleSubmit() {
-        const nickname = $nicknameInput.value.trim();
+    async handleSubmit() {
+        const nickname = this.$container.querySelector("#profile-edit-nickname-input").value.trim();
 
         // 닉네임 검증
         if (!nickname) {
@@ -87,13 +87,13 @@ export default function ProfileEditPage() {
             return;
         }
 
-        let imageUrl = userInfo.profileImageUrl;
-        // 이미지가 있다면 이미지 업로드
-        if (selectedImageFile) {
+        let imageUrl = this.state.profileImageUrl;
+        // 이미지가 변경되었을 경우 업로드
+        if (this.state.selectedImageFile) {
             try {
-                imageUrl = await uploadImageToImgBB(selectedImageFile);
+                imageUrl = await uploadImageToImgBB(this.state.selectedImageFile);
             } catch (error) {
-                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.")
+                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.");
                 return;
             }
         }
@@ -113,6 +113,4 @@ export default function ProfileEditPage() {
             alert(error.message);
         }
     }
-
-    return container;
 }
