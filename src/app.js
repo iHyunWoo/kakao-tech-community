@@ -29,14 +29,16 @@ function updateHeader(currentPath) {
     const { showBackButton = true, showProfile = true } = headerConfig[currentPath] || {};
     const userInfo = JSON.parse(localStorage.getItem("user")) || {};
     const profileImage = userInfo.profileImageUrl || "https://placehold.co/36";
-    headerContainer.appendChild(Header({ showBackButton, showProfile, profileImage }));
+
+    const headerComponent = new Header({ showBackButton, showProfile, profileImage });
+    headerContainer.appendChild(headerComponent.getContainer());
 }
 
 // 라우트 설정
 const routes = {
     [ROUTES.HOME]: () => location.hash = `#${initialRoute}`,
-    [ROUTES.LOGIN]: LoginPage,
-    [ROUTES.SIGNUP]: SignupPage,
+    [ROUTES.LOGIN]: new LoginPage(),
+    [ROUTES.SIGNUP]: new SignupPage(),
     [ROUTES.POSTS]: PostListPage,
     "/posts/:id": (params) => PostDetailPage(params.id),
     "/posts/form/:id?": (params) => PostFormPage({ mode: params.id ? "update" : "create", postId: params.id }),

@@ -38,9 +38,9 @@ export default class Router {
         this.renderView(this.routes["/404"]);
     }
 
-    renderView(viewFunction) {
+    renderView(view) {
         const app = document.querySelector("#app");
         app.innerHTML = "";
-        app.appendChild(viewFunction());
+        app.appendChild(view.getContainer());
     }
 }
