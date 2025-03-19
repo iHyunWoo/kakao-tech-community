@@ -28,7 +28,7 @@ export default class Router {
                         return acc;
                     }, {});
 
-                    this.renderView(() => this.routes[routePattern](params));
+                    this.renderView(this.routes[routePattern](params));
                     return;
                 }
             }

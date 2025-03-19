@@ -5,8 +5,8 @@ export default class Component {
 
     constructor(props = {}) {
         this.props = props;
-        this.setup();
         this.$container = document.createElement("div"); // 페이지 컨테이너 생성
+        this.setup();
         this.setEvent();
         this.render();
     }
