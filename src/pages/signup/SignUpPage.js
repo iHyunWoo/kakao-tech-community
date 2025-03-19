@@ -146,12 +146,15 @@ export default class SignupPage extends Component {
     async handleSignup() {
         if (!this.validateInputs()) return;
 
+        this.showLoading();
+
         let imageUrl = "";
         if (this.state.selectedImageFile) {
             try {
                 imageUrl = await uploadImageToImgBB(this.state.selectedImageFile);
             } catch (error) {
                 alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.");
+                this.hideLoading();
                 return;
             }
         }
@@ -162,6 +165,8 @@ export default class SignupPage extends Component {
             navigateTo(ROUTES.LOGIN);
         } catch (error) {
             alert(`회원가입 실패: ${error.message}`);
+        } finally {
+            this.hideLoading();
         }
     }
 }

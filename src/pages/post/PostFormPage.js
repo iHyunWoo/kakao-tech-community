@@ -62,6 +62,7 @@ export default class PostFormPage extends Component {
     }
 
     async loadPostData() {
+        this.showLoading()
         try {
             const response = await getPost(this.state.postId);
             const postData = response.data;
@@ -70,6 +71,8 @@ export default class PostFormPage extends Component {
             }
         } catch (error) {
             console.error("게시글 불러오기 실패:", error);
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -94,12 +97,14 @@ export default class PostFormPage extends Component {
             return;
         }
 
+        this.showLoading();
         let imageUrl = post.imageUrl;
         if (selectedImageFile) {
             try {
                 imageUrl = await uploadImageToImgBB(selectedImageFile);
             } catch (error) {
                 alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.");
+                this.hideLoading();
                 return;
             }
         }
@@ -115,6 +120,8 @@ export default class PostFormPage extends Component {
             navigateTo(ROUTES.POSTS);
         } catch (error) {
             console.error("게시글 저장 실패:", error);
+        } finally {
+            this.hideLoading();
         }
     }
 }

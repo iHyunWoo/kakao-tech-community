@@ -111,6 +111,7 @@ export default class PostDetailPage extends Component {
     }
 
     async fetchPost() {
+        this.showLoading();
         this.setState({ isPostLoading: true });
         try {
             const response = await getPost(this.state.postId);
@@ -125,12 +126,15 @@ export default class PostDetailPage extends Component {
         } catch (error) {
             console.error("게시글 조회 실패:", error);
         } finally {
+            this.hideLoading()
             this.setState({ isPostLoading: false });
         }
     }
 
     async fetchComments() {
         if (this.state.isLoading || !this.state.hasNextPage) return;
+
+        this.showLoading();
         this.setState({ isLoading: true });
 
         try {
@@ -152,6 +156,8 @@ export default class PostDetailPage extends Component {
             this.renderComments();
         } catch (error) {
             console.error("댓글 로드 실패:", error);
+        } finally {
+            this.hideLoading();
             this.setState({ isLoading: false });
         }
     }
@@ -165,6 +171,7 @@ export default class PostDetailPage extends Component {
             return;
         }
 
+        this.showLoading();
         try {
             await createComment(this.state.postId, content);
             alert("댓글이 등록되었습니다.");
@@ -174,10 +181,13 @@ export default class PostDetailPage extends Component {
             $commentEditor.value = "";
         } catch (error) {
             console.error("댓글 등록 실패:", error);
+        } finally {
+            this.hideLoading();
         }
     }
 
     async handleDeleteComment(commentId) {
+        this.showLoading();
         try {
             await deleteComment(this.state.postId, commentId);
             alert("댓글이 삭제되었습니다.");
@@ -186,21 +196,28 @@ export default class PostDetailPage extends Component {
             this.fetchComments();
         } catch (error) {
             console.error("댓글 삭제 실패:", error);
+        } finally {
+            this.hideLoading();
         }
     }
 
     async handleDeletePost() {
+        this.showLoading();
         try {
             await deletePost(this.state.postId);
             alert("게시글이 삭제되었습니다.");
             navigateTo(ROUTES.POSTS);
         } catch (error) {
             console.error("게시글 삭제 실패:", error);
+        } finally {
+            this.hideLoading();
         }
     }
 
     async handleLikeToggle() {
+        this.showLoading();
         const response = await togglePostLike(this.state.postId);
+        this.hideLoading();
         if (response) {
             const isLiked = response.data;
             const updatedPost = { ...this.state.post, likeCount: this.state.post.likeCount + (isLiked ? 1 : -1), isLiked: isLiked };

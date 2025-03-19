@@ -6,6 +6,7 @@ import Component from "../../core/Component.js";
 
 export default class LoginPage extends Component {
     setup() {
+        super.setup();
         this.state = {
             email: "",
             password: "",
@@ -61,6 +62,7 @@ export default class LoginPage extends Component {
     }
 
     async handleLogin(email, password) {
+        this.showLoading();
         try {
             await login(email, password);
             const userInfoResponse = await getUserInfo();
@@ -72,6 +74,8 @@ export default class LoginPage extends Component {
             navigateTo(ROUTES.POSTS);
         } catch (error) {
             alert(`로그인 실패: ${error.message}`);
+        } finally {
+            this.hideLoading();
         }
     }
 

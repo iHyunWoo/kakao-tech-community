@@ -41,6 +41,8 @@ export default class PostListPage extends Component {
     async fetchPosts() {
         if (this.state.isLoading || !this.state.hasNextPage) return;
 
+        this.showLoading();
+
         this.setState({ isLoading: true });
 
         try {
@@ -62,6 +64,7 @@ export default class PostListPage extends Component {
         } catch (error) {
             console.error("게시글 불러오기 실패:", error);
         } finally {
+            this.hideLoading();
             this.setState({ isLoading: false });
         }
     }

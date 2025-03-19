@@ -87,6 +87,7 @@ export default class ProfileEditPage extends Component {
             return;
         }
 
+        this.showLoading();
         let imageUrl = this.state.profileImageUrl;
         // 이미지가 변경되었을 경우 업로드
         if (this.state.selectedImageFile) {
@@ -94,6 +95,7 @@ export default class ProfileEditPage extends Component {
                 imageUrl = await uploadImageToImgBB(this.state.selectedImageFile);
             } catch (error) {
                 alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.");
+                this.hideLoading();
                 return;
             }
         }
@@ -111,6 +113,8 @@ export default class ProfileEditPage extends Component {
             navigateTo(ROUTES.POSTS); // 게시판으로 이동
         } catch (error) {
             alert(error.message);
+        } finally {
+            this.hideLoading();
         }
     }
 }
