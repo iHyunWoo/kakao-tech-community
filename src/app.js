@@ -1,6 +1,6 @@
 import {ROUTES} from "./constants/routes.js";
 import LoginPage from "./pages/login/LoginPage.js";
-import Router from "./router.js";
+import {addRoute, navigate, renderRoute} from "./router.js";
 import PostListPage from "./pages/post/PostListPage.js";
 import PostDetailPage from "./pages/post/PostDetailPage.js";
 import Header from "./components/header/Header.js";
@@ -15,41 +15,19 @@ const isLoggedIn = localStorage.getItem("isLoggedIn");
 // 로그인 여부에 따른 초기 라우트 설정
 const initialRoute = isLoggedIn ? [ROUTES.POSTS] : [ROUTES.LOGIN];
 
-// 헤더 동적 업데이트
-function updateHeader(currentPath) {
-    const headerContainer = document.querySelector("#header-container");
-    headerContainer.innerHTML = ""; // 기존 헤더 제거
+addRoute(ROUTES.LOGIN, LoginPage);
+addRoute(ROUTES.SIGNUP, SignupPage);
+addRoute(ROUTES.POSTS, PostListPage);
+addRoute("/posts/:id", PostDetailPage);
+addRoute("/posts/form/:id?", PostFormPage);
+addRoute(ROUTES.PROFILE_EDIT, ProfileEditPage);
+addRoute(ROUTES.PASSWORD_EDIT, PasswordEditPage);
 
-    const headerConfig = {
-        [ROUTES.LOGIN]: { showBackButton: false, showProfile: false },
-        [ROUTES.SIGNUP]: { showBackButton: true, showProfile: false },
-        [ROUTES.POSTS]: { showBackButton: false, showProfile: true },
-    };
-
-    const { showBackButton = true, showProfile = true } = headerConfig[currentPath] || {};
-    const userInfo = JSON.parse(localStorage.getItem("user")) || {};
-    const profileImage = userInfo.profileImageUrl || "https://placehold.co/36";
-
-    const headerComponent = new Header({ showBackButton, showProfile, profileImage });
-    headerContainer.appendChild(headerComponent.getContainer());
+// 초기 라우팅
+if (window.location.pathname === "/") {
+    navigate(initialRoute);
 }
 
-// 라우트 설정
-const routes = {
-    [ROUTES.HOME]: () => location.hash = `#${initialRoute}`,
-    [ROUTES.LOGIN]: new LoginPage(),
-    [ROUTES.SIGNUP]: new SignupPage(),
-    [ROUTES.POSTS]: new PostListPage(),
-    "/posts/:id": (params) => new PostDetailPage({ postId: params.id}),
-    "/posts/form/:id?": (params) =>  new PostFormPage({ mode: params.id ? "update" : "create", postId: params.id }),
-    [ROUTES.PROFILE_EDIT]: new ProfileEditPage(),
-    [ROUTES.PASSWORD_EDIT]: new PasswordEditPage(),
-};
-
-const router = new Router(routes, updateHeader);
-updateHeader(location.hash.replace("#", "") || "/"); // 초기 실행
-
-// 라우트 변경 시 헤더 업데이트
-window.addEventListener("hashchange", () => {
-    updateHeader(location.hash.replace("#", "") || "/");
+document.addEventListener("DOMContentLoaded", () => {
+    renderRoute();
 });

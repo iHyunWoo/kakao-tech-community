@@ -1,17 +1,16 @@
 import {deletePost, getPost, togglePostLike} from "../../api/postApi.js";
 import Modal from "../../components/modal/modal.js";
-import { navigateTo } from "../../util/navigateTo.js";
 import { ROUTES } from "../../constants/routes.js";
 import {getComments, deleteComment, createComment} from "../../api/commentApi.js";
 import CommentListItem from "./component/CommentListItem.js";
 import {formatDateTime} from "../../util/dateUtil.js";
 import Component from "../../core/Component.js";
+import {navigate} from "../../router.js";
 
 export default class PostDetailPage extends Component {
     setup() {
-
         this.state = {
-            postId: this.props.postId,
+            postId: this.props,
             post: null,
             isPostLoading: false,
             comments: [],
@@ -206,7 +205,7 @@ export default class PostDetailPage extends Component {
         try {
             await deletePost(this.state.postId);
             alert("게시글이 삭제되었습니다.");
-            navigateTo(ROUTES.POSTS);
+            navigate(ROUTES.POSTS);
         } catch (error) {
             console.error("게시글 삭제 실패:", error);
         } finally {
@@ -226,7 +225,7 @@ export default class PostDetailPage extends Component {
     }
 
     onEditPostPress() {
-        navigateTo(ROUTES.POST_FORM(this.state.postId))
+        navigate(ROUTES.POST_FORM(this.state.postId))
     }
 
     onDeletePostPress() {

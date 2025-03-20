@@ -1,7 +1,7 @@
 import {logout} from "../../api/userApi.js";
 import Component from "../../core/Component.js";
-import {navigateTo} from "../../util/navigateTo.js";
 import {ROUTES} from "../../constants/routes.js";
+import {goBack, navigate} from "../../router.js";
 
 export default class Header extends Component {
     setup() {
@@ -46,7 +46,7 @@ export default class Header extends Component {
 
     setEvent() {
         this.addEvent("click", "#header-back-button", () => {
-            history.back();
+            goBack();
         });
 
         this.addEvent("click", "#header-profile-button", () => {
@@ -54,17 +54,17 @@ export default class Header extends Component {
         });
 
         this.addEvent("click", "#header-profile-dropdown-edit-profile-button", () => {
-            navigateTo(ROUTES.PROFILE_EDIT);
+            navigate(ROUTES.PROFILE_EDIT);
         });
 
         this.addEvent("click", "#header-profile-dropdown-edit-password-button", () => {
-            navigateTo(ROUTES.PASSWORD_EDIT);
+            navigate(ROUTES.PASSWORD_EDIT);
         });
 
         this.addEvent("click", "#header-profile-dropdown-logout-button", async () => {
             await logout();
             localStorage.removeItem("isLoggedIn");
-            navigateTo(ROUTES.LOGIN);
+            navigate(ROUTES.LOGIN);
         });
     }
 }
