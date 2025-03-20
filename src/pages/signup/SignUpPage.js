@@ -1,189 +1,172 @@
-import loadCSS from "../../util/loadCSS.js";
-import { navigateTo } from "../../util/navigateTo.js";
-import { ROUTES } from "../../constants/routes.js";
-import { validateEmail, validatePassword } from "../../util/validators.js";
-import { register } from "../../api/userApi.js";
+import {navigateTo} from "../../util/navigateTo.js";
+import {ROUTES} from "../../constants/routes.js";
+import {validateEmail, validatePassword} from "../../util/validators.js";
+import {register} from "../../api/userApi.js";
 import {uploadImageToImgBB} from "../../api/imgbbApi.js";
+import Component from "../../core/Component.js";
 
-export default function SignupPage() {
-    loadCSS("/style/index.css");
-    loadCSS("/style/signup-page.css");
+export default class SignupPage extends Component {
+    setup() {
+        this.state = {
+            email: "",
+            password: "",
+            passwordConfirm: "",
+            nickname: "",
+            profileImageUrl: "/resources/plus-in-circle.png",
+            selectedImageFile: null,
+            errors: {
+                email: "",
+                password: "",
+                passwordConfirm: "",
+                nickname: "",
+                profileImage: "",
+            },
+        };
 
-    const $container = document.createElement("section");
-    $container.id = "signup-section";
+        this.loadCSS("/style/index.css");
+        this.loadCSS("/style/signup-page.css");
+    }
 
-    $container.innerHTML = `
-        <h2 id="signup-title">회원가입</h2>
-        <div>
-            <div id="profile-image-div">
-                <p class="title">프로필 사진</p>
-                <p class="signup-alert-message" id="profile-image-alert-message">* 프로필 사진을 추가해주세요.</p>
+    template() {
+        const {email, password, passwordConfirm, nickname, profileImageUrl, errors} = this.state;
+
+        return `
+        <section id="signup-section">
+            <h2 id="signup-title">회원가입</h2>
+            <div>
+                <div id="profile-image-div">
+                    <p class="title">프로필 사진</p>
+                    <p class="signup-alert-message" id="profile-image-alert-message">${errors.profileImage || ""}</p>
+                </div>
+                <div id="profile-image-upload-div">
+                    <input type="file" id="profile-image-input" accept="image/*" hidden/>
+                    <button id="profile-image-button">
+                        <img id="profile-image" src="${profileImageUrl}" alt=""/>
+                    </button>
+                </div>
+                <form id="signup-form">
+                    <label class="signup-label" for="email">이메일*</label>
+                    <input class="signup-input" type="text" id="email" value="${email}" placeholder="이메일을 입력하세요">
+                    <p class="signup-alert-message">${errors.email || ""}</p>
+
+                    <label class="signup-label" for="password">비밀번호*</label>
+                    <input class="signup-input" type="password" id="password" value="${password}" placeholder="비밀번호를 입력하세요">
+                    <p class="signup-alert-message">${errors.password || ""}</p>
+
+                    <label class="signup-label" for="password-confirm">비밀번호 확인*</label>
+                    <input class="signup-input" type="password" id="password-confirm" value="${passwordConfirm}" placeholder="비밀번호를 한번 더 입력하세요">
+                    <p class="signup-alert-message">${errors.passwordConfirm || ""}</p>
+
+                    <label class="signup-label" for="nickname">닉네임*</label>
+                    <input class="signup-input" type="text" id="nickname" value="${nickname}" placeholder="닉네임을 입력하세요">
+                    <p class="signup-alert-message">${errors.nickname || ""}</p>
+
+                    <input class="signup-button" type="submit" value="회원가입">
+                </form>
             </div>
-            <div id="profile-image-upload-div">
-                <input type="file" id="profile-image-input" accept="image/*" hidden/>
-                <button id="profile-image-button">
-                    <img id="profile-image" src="/resources/plus-in-circle.png" alt=""/>
-                </button>
-            </div>
-            <form id="signup-form">
-                <label class="signup-label" for="email">이메일*</label>
-                <input class="signup-input" type="text" id="email" placeholder="이메일을 입력하세요">
-                <p class="signup-alert-message" id="email-alert-message"></p>
+            <a id="login-button">로그인하러 가기</a>
+        </section>
+        `;
+    }
 
-                <label class="signup-label" for="password">비밀번호*</label>
-                <input class="signup-input" type="password" id="password" placeholder="비밀번호를 입력하세요">
-                <p class="signup-alert-message" id="password-alert-message"></p>
+    setEvent() {
+        this.addEvent("click", "#profile-image-button", () => {
+            this.$container.querySelector("#profile-image-input").click();
+        });
 
-                <label class="signup-label" for="password-confirm">비밀번호 확인*</label>
-                <input class="signup-input" type="password" id="password-confirm" placeholder="비밀번호를 한번 더 입력하세요">
-                <p class="signup-alert-message" id="password-confirm-alert-message"></p>
+        this.addEvent("change", "#profile-image-input", (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.setState({
+                        profileImageUrl: e.target.result,
+                        selectedImageFile: file,
+                        errors: {...this.state.errors, profileImage: ""},
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
-                <label class="signup-label" for="nickname">닉네임*</label>
-                <input class="signup-input" type="text" id="nickname" placeholder="닉네임을 입력하세요">
-                <p class="signup-alert-message" id="nickname-alert-message"></p>
+        this.addEvent("input", "#email", (event) => {
+            // setState가 아닌 직접 상태를 지정하여 입력 시 리렌더링 방지
+            this.state.email = event.target.value;
+            this.state.errors.email = "";
+        });
 
-                <input class="signup-button" type="submit" value="회원가입">
-            </form>
-        </div>
-        <a id="login-button">로그인하러 가기</a>
-    `;
+        this.addEvent("input", "#password", (event) => {
+            // setState가 아닌 직접 상태를 지정하여 입력 시 리렌더링 방지
+            this.state.password = event.target.value;
+            this.state.errors.password = "";
+        });
 
-    const $profileImageInput = $container.querySelector("#profile-image-input");
-    const $profileImageButton = $container.querySelector("#profile-image-button");
-    const $profileImage = $container.querySelector("#profile-image");
-    const $profileAlert = $container.querySelector("#profile-image-alert-message");
-    const $emailInput = $container.querySelector("#email");
-    const $passwordInput = $container.querySelector("#password");
-    const $passwordConfirmInput = $container.querySelector("#password-confirm");
-    const $nicknameInput = $container.querySelector("#nickname");
-    const $signupForm = $container.querySelector("#signup-form");
-    const $loginButton = $container.querySelector("#login-button")
+        this.addEvent("input", "#password-confirm", (event) => {
+            // setState가 아닌 직접 상태를 지정하여 입력 시 리렌더링 방지
+            this.state.passwordConfirm = event.target.value;
+            this.state.errors.passwordConfirm = "";
+        });
 
-    // alert message
-    const $emailAlert = $container.querySelector("#email-alert-message");
-    const $passwordAlert = $container.querySelector("#password-alert-message");
-    const $passwordConfirmAlert = $container.querySelector("#password-confirm-alert-message");
-    const $nicknameAlert = $container.querySelector("#nickname-alert-message");
+        this.addEvent("input", "#nickname", (event) => {
+            // setState가 아닌 직접 상태를 지정하여 입력 시 리렌더링 방지
+            this.state.nickname = event.target.value;
+            this.state.errors.nickname = "";
+        });
 
-    let selectedImageFile = null;
+        this.addEvent("submit", "#signup-form", (event) => {
+            event.preventDefault();
+            this.handleSignup();
+        });
 
-    // 프로필 이미지 미리보기
-    $profileImageButton.addEventListener("click", () => $profileImageInput.click());
-    $profileImageInput.addEventListener("change", () => {
-        const file = $profileImageInput.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                $profileImage.src = e.target.result;
-                $profileAlert.style.visibility = "hidden";
-                selectedImageFile = file;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+        this.addEvent("click", "#login-button", () => {
+            navigateTo(ROUTES.LOGIN);
+        });
+    }
 
-    function checkProfileImage() {
-        if (!$profileImageInput.files.length) {
-            $profileAlert.style.visibility = "visible";
+    validateInputs() {
+        const { email, password, passwordConfirm, nickname, selectedImageFile } = this.state;
+
+        const setError = (field, message) => {
+            this.setState({ errors: { [field]: message } });
             return false;
-        }
-        $profileAlert.style.visibility = "hidden";
+        };
+
+        if (!selectedImageFile) return setError("profileImage", "프로필 사진을 추가해주세요.");
+        if (!validateEmail(email)) return setError("email", "올바른 이메일 주소 형식을 입력해주세요.");
+        if (!password) return setError("password", "비밀번호를 입력해주세요.");
+        if (!validatePassword(password)) return setError("password", "비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 특수문자를 각각 최소 1개 포함해야 합니다.");
+        if (password !== passwordConfirm) return setError("passwordConfirm", "비밀번호가 다릅니다.");
+        if (nickname.includes(" ")) return setError("nickname", "띄어쓰기를 없애주세요.");
+        if (nickname.length > 10) return setError("nickname", "닉네임은 최대 10자까지 작성 가능합니다.");
+
+        this.setState({ errors: {} });
         return true;
     }
 
-    function checkEmail(email) {
-        if (!validateEmail(email)) {
-            $emailAlert.textContent = "올바른 이메일 주소 형식을 입력해주세요.";
-            $emailAlert.style.visibility = "visible";
-            return false;
-        }
-        $emailAlert.style.visibility = "hidden";
-        return true;
-    }
+    async handleSignup() {
+        if (!this.validateInputs()) return;
 
-    function checkPassword(password) {
-        if (!password) {
-            $passwordAlert.textContent = "비밀번호를 입력해주세요.";
-            $passwordAlert.style.visibility = "visible";
-            return false;
-        }
-        if (!validatePassword(password)) {
-            $passwordAlert.textContent = "비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 특수문자를 각각 최소 1개 포함해야 합니다.";
-            $passwordAlert.style.visibility = "visible";
-            return false;
-        }
-        $passwordAlert.style.visibility = "hidden";
-        return true;
-    }
-
-    function checkPasswordConfirm(password, confirm) {
-        if (password !== confirm) {
-            $passwordConfirmAlert.textContent = "비밀번호가 다릅니다.";
-            $passwordConfirmAlert.style.visibility = "visible";
-            return false;
-        }
-        $passwordConfirmAlert.style.visibility = "hidden";
-        return true;
-    }
-
-    function checkNickname(nickname) {
-        if (nickname.includes(" ")) {
-            $nicknameAlert.textContent = "띄어쓰기를 없애주세요.";
-            $nicknameAlert.style.visibility = "visible";
-            return false;
-        }
-        if (nickname.length > 10) {
-            $nicknameAlert.textContent = "닉네임은 최대 10자까지 작성 가능합니다.";
-            $nicknameAlert.style.visibility = "visible";
-            return false;
-        }
-        $nicknameAlert.style.visibility = "hidden";
-        return true;
-    }
-
-    // 회원가입 요청
-    async function handleSignup() {
-        const email = $emailInput.value.trim();
-        const password = $passwordInput.value.trim();
-        const passwordConfirm = $passwordConfirmInput.value.trim();
-        const nickname = $nicknameInput.value.trim();
-
-        if (!checkProfileImage() || !checkEmail(email) || !checkPassword(password) ||
-            !checkPasswordConfirm(password, passwordConfirm) || !checkNickname(nickname)) return;
+        this.showLoading();
 
         let imageUrl = "";
-        // 이미지가 있다면 이미지 업로드
-        if (selectedImageFile) {
+        if (this.state.selectedImageFile) {
             try {
-                imageUrl = await uploadImageToImgBB(selectedImageFile);
+                imageUrl = await uploadImageToImgBB(this.state.selectedImageFile);
             } catch (error) {
-                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.")
+                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.");
+                this.hideLoading();
                 return;
             }
         }
 
         try {
-            await register(email, password, nickname, imageUrl);
+            await register(this.state.email, this.state.password, this.state.nickname, imageUrl);
             alert("회원가입이 완료되었습니다!");
-            navigateTo(ROUTES.LOGIN); // 로그인 페이지로 이동
+            navigateTo(ROUTES.LOGIN);
         } catch (error) {
             alert(`회원가입 실패: ${error.message}`);
+        } finally {
+            this.hideLoading();
         }
     }
-
-    // 이벤트 바인딩
-    function addEventListeners() {
-        $signupForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            handleSignup();
-        });
-
-        $loginButton.addEventListener("click", () => {
-            navigateTo(ROUTES.LOGIN);
-        });
-    }
-
-    addEventListeners()
-
-    return $container;
 }

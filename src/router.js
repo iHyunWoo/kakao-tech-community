@@ -28,7 +28,7 @@ export default class Router {
                         return acc;
                     }, {});
 
-                    this.renderView(() => this.routes[routePattern](params));
+                    this.renderView(this.routes[routePattern](params));
                     return;
                 }
             }
@@ -38,9 +38,9 @@ export default class Router {
         this.renderView(this.routes["/404"]);
     }
 
-    renderView(viewFunction) {
+    renderView(view) {
         const app = document.querySelector("#app");
         app.innerHTML = "";
-        app.appendChild(viewFunction());
+        app.appendChild(view.getContainer());
     }
 }

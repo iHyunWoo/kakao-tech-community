@@ -1,70 +1,68 @@
-import loadCSS from "../../util/loadCSS.js";
 import {navigateTo} from "../../util/navigateTo.js";
 import {ROUTES} from "../../constants/routes.js";
 import {validateEmail, validatePassword} from "../../util/validators.js";
 import {getUserInfo, login} from "../../api/userApi.js";
+import Component from "../../core/Component.js";
 
-export default function LoginPage() {
-    loadCSS("/style/index.css")
-    loadCSS("/style/login-page.css")
+export default class LoginPage extends Component {
+    setup() {
+        super.setup();
+        this.state = {
+            email: "",
+            password: "",
+            emailError: "",
+            passwordError: "",
+        };
 
-    const $container = document.createElement("div");
-    $container.id = "container";
-
-    $container.innerHTML = `
-     <div class="login-container">
-        <h2 class="login-title">로그인</h2>
-        <form id="login-form">
-            <label class="login-label" for="email">이메일</label>
-            <input class="login-input" type="text" id="email" placeholder="이메일을 입력하세요">
-            <p class="login-alert-message" id="email-alert-message">* helper text</p>
-            <label class="login-label" for="password">비밀번호</label>
-            <input class="login-input" type="password" id="password" placeholder="비밀번호를 입력하세요">
-            <p class="login-alert-message" id="password-alert-message">* helper text</p>
-            <input class="login-button" type="submit" value="로그인">
-        </form>
-        <a id="signup-button">회원가입</a>
-    </div>
-    `;
-
-    const $emailInput = $container.querySelector("#email");
-    const $passwordInput = $container.querySelector("#password");
-    const $emailAlert = $container.querySelector("#email-alert-message");
-    const $passwordAlert = $container.querySelector("#password-alert-message");
-    const $loginForm = $container.querySelector("#login-form");
-    const $signupButton = $container.querySelector("#signup-button");
-
-    // 이메일 유효성 검사
-    function checkEmail(email) {
-        if (!validateEmail(email)) {
-            $emailAlert.textContent = "올바른 이메일 주소 형식을 입력해주세요.";
-            $emailAlert.style.visibility = "visible";
-            return false;
-        }
-        $emailAlert.style.visibility = "hidden";
-        return true;
+        this.loadCSS("/style/login-page.css");
     }
 
-    // 비밀번호 유효성 검사
-    function checkPassword(password) {
-        if (!password) {
-            $passwordAlert.textContent = "비밀번호를 입력해주세요";
-            $passwordAlert.style.visibility = "visible";
-            return false;
-        }
-
-        if (!validatePassword(password)) {
-            $passwordAlert.textContent = "비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 특수문자를 각각 최소 1개씩 포함해야 합니다.";
-            $passwordAlert.style.visibility = "visible";
-            return false;
-        }
-
-        $passwordAlert.style.visibility = "hidden";
-        return true;
+    template() {
+        const { email, password, emailError, passwordError } = this.state;
+        return `
+        <div class="login-container">
+            <h2 class="login-title">로그인</h2>
+            <form id="login-form">
+                <label class="login-label" for="email">이메일</label>
+                <input class="login-input" type="text" id="email" value="${email}" placeholder="이메일을 입력하세요">
+                <p class="login-alert-message" id="email-alert-message">${emailError}</p>
+                
+                <label class="login-label" for="password">비밀번호</label>
+                <input class="login-input" type="password" id="password" value="${password}" placeholder="비밀번호를 입력하세요">
+                <p class="login-alert-message" id="password-alert-message">${passwordError || ""}</p>
+                
+                <input class="login-button" type="submit" value="로그인">
+            </form>
+            <a id="signup-button">회원가입</a>
+        </div>
+        `;
     }
 
-    // 로그인 API 요청
-    async function handleLogin(email, password) {
+    setEvent() {
+        this.addEvent("input", "#email", (event) => {
+            // setState가 아닌 직접 상태를 지정하여 입력 시 리렌더링 방지
+            this.state.email = event.target.value;
+            this.state.emailError = "";
+        });
+
+        this.addEvent("input", "#password", (event) => {
+            // setState가 아닌 직접 상태를 지정하여 입력 시 리렌더링 방지
+            this.state.password = event.target.value;
+            this.state.passwordError = "";
+        });
+
+        this.addEvent("submit", "#login-form", (event) => {
+            event.preventDefault();
+            this.onLoginSubmit();
+        });
+
+        this.addEvent("click", "#signup-button", () => {
+            navigateTo(ROUTES.SIGNUP);
+        });
+    }
+
+    async handleLogin(email, password) {
+        this.showLoading();
         try {
             await login(email, password);
             const userInfoResponse = await getUserInfo();
@@ -73,36 +71,29 @@ export default function LoginPage() {
                 localStorage.setItem("user", JSON.stringify(userInfo));
             }
             alert("로그인 성공!");
-            navigateTo(ROUTES.POSTS); // 게시판으로 이동
+            navigateTo(ROUTES.POSTS);
         } catch (error) {
             alert(`로그인 실패: ${error.message}`);
+        } finally {
+            this.hideLoading();
         }
     }
 
-    // 로그인 버튼 (폼 제출) 동작
-    function onLoginSubmit(event) {
-        event.preventDefault(); // 기본 동작 차단
+    onLoginSubmit() {
+        const { email, password } = this.state;
 
-        const email = $emailInput.value.trim();
-        const password = $passwordInput.value.trim();
+        if (!validateEmail(email)) {
+            this.setState({ emailError: "올바른 이메일 주소 형식을 입력해주세요." });
+            return;
+        }
 
-        if (!checkEmail(email) || !checkPassword(password)) return; // 유효성 검사 실패 시 중단
+        if (!validatePassword(password)) {
+            this.setState({
+                passwordError: "비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 특수문자를 각각 최소 1개씩 포함해야 합니다."
+            });
+            return;
+        }
 
-        handleLogin(email, password);
+        this.handleLogin(email, password);
     }
-
-    // 회원가입 이동 버튼
-    function onSignupClick() {
-        navigateTo(ROUTES.SIGNUP);
-    }
-
-    // 이벤트 바인딩
-    function addEventListeners() {
-        $loginForm.addEventListener("submit", onLoginSubmit);
-        $signupButton.addEventListener("click", onSignupClick);
-    }
-
-    addEventListeners(); // 초기화
-
-    return $container;
 }
