@@ -1,9 +1,9 @@
-import {navigateTo} from "../../util/navigateTo.js";
 import {ROUTES} from "../../constants/routes.js";
 import {validateEmail, validatePassword} from "../../util/validators.js";
 import {register} from "../../api/userApi.js";
 import {uploadImageToImgBB} from "../../api/imgbbApi.js";
 import Component from "../../core/Component.js";
+import {navigate} from "../../router.js";
 
 export default class SignupPage extends Component {
     setup() {
@@ -119,7 +119,7 @@ export default class SignupPage extends Component {
         });
 
         this.addEvent("click", "#login-button", () => {
-            navigateTo(ROUTES.LOGIN);
+            navigate(ROUTES.LOGIN);
         });
     }
 
@@ -162,7 +162,7 @@ export default class SignupPage extends Component {
         try {
             await register(this.state.email, this.state.password, this.state.nickname, imageUrl);
             alert("회원가입이 완료되었습니다!");
-            navigateTo(ROUTES.LOGIN);
+            navigate(ROUTES.LOGIN);
         } catch (error) {
             alert(`회원가입 실패: ${error.message}`);
         } finally {

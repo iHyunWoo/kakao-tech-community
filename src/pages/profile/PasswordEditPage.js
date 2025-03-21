@@ -1,8 +1,8 @@
 import {validatePassword} from "../../util/validators.js";
 import {updatePassword} from "../../api/userApi.js";
-import {navigateTo} from "../../util/navigateTo.js";
 import {ROUTES} from "../../constants/routes.js";
 import Component from "../../core/Component.js";
+import {navigate} from "../../router.js";
 
 export default class PasswordEditPage extends Component {
     setup() {
@@ -83,7 +83,7 @@ export default class PasswordEditPage extends Component {
         try {
             await updatePassword(this.state.password);
             alert("비밀번호가 수정되었습니다!");
-            navigateTo(ROUTES.POSTS); // 게시판으로 이동
+            navigate(ROUTES.POSTS); // 게시판으로 이동
         } catch (error) {
             alert(error.message);
         } finally {

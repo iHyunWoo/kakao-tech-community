@@ -1,7 +1,7 @@
-import {navigateTo} from "../../../util/navigateTo.js";
 import {ROUTES} from "../../../constants/routes.js";
 import {formatDateTime} from "../../../util/dateUtil.js";
 import Component from "../../../core/Component.js";
+import {navigate} from "../../../router.js";
 
 export default class PostListItem extends Component {
     setup() {
@@ -33,7 +33,7 @@ export default class PostListItem extends Component {
 
     setEvent() {
         this.addEvent("click", ".post-item", () => {
-            navigateTo(ROUTES.POST_DETAIL(this.state.post.id));
+            navigate(ROUTES.POST_DETAIL(this.state.post.id));
         });
     }
 }

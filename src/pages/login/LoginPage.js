@@ -1,8 +1,8 @@
-import {navigateTo} from "../../util/navigateTo.js";
 import {ROUTES} from "../../constants/routes.js";
 import {validateEmail, validatePassword} from "../../util/validators.js";
 import {getUserInfo, login} from "../../api/userApi.js";
 import Component from "../../core/Component.js";
+import {navigate} from "../../router.js";
 
 export default class LoginPage extends Component {
     setup() {
@@ -57,7 +57,7 @@ export default class LoginPage extends Component {
         });
 
         this.addEvent("click", "#signup-button", () => {
-            navigateTo(ROUTES.SIGNUP);
+            navigate(ROUTES.SIGNUP);
         });
     }
 
@@ -71,7 +71,7 @@ export default class LoginPage extends Component {
                 localStorage.setItem("user", JSON.stringify(userInfo));
             }
             alert("로그인 성공!");
-            navigateTo(ROUTES.POSTS);
+            navigate(ROUTES.POSTS);
         } catch (error) {
             alert(`로그인 실패: ${error.message}`);
         } finally {

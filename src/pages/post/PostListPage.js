@@ -1,8 +1,8 @@
 import { ROUTES } from "../../constants/routes.js";
-import { navigateTo } from "../../util/navigateTo.js";
 import { getPosts } from "../../api/postApi.js";
 import PostListItem from "./component/PostListItem.js";
 import Component from "../../core/Component.js";
+import {navigate} from "../../router.js";
 
 export default class PostListPage extends Component {
     setup() {
@@ -33,7 +33,7 @@ export default class PostListPage extends Component {
 
     setEvent() {
         this.addEvent("click", "#write-post-button", () => {
-            navigateTo(ROUTES.POST_FORM());
+            navigate(ROUTES.POST_FORM());
         });
     }
 
