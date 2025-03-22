@@ -1,5 +1,6 @@
 import Component from "../../../core/Component.js";
 import {uploadImageToImgBB} from "../../../api/imgbbApi.js";
+import renderMarkdown from "../../../util/renderMarkdown.js";
 
 export default class MarkdownEditor extends Component {
   setup() {
@@ -32,7 +33,7 @@ export default class MarkdownEditor extends Component {
           ${mode === "write" ? `
             <textarea id="markdown-textarea" placeholder="내용을 입력해주세요.">${content}</textarea>
           ` : `
-            <div id="markdown-preview">${this.renderMarkdown(content)}</div>
+            <div id="markdown-preview">${renderMarkdown(content)}</div>
           `}
         </div>
       </div>
@@ -73,18 +74,6 @@ export default class MarkdownEditor extends Component {
     });
   }
 
-  renderMarkdown(markdown) {
-    // 간단한 마크다운 렌더링 (추후 확장 가능)
-    return markdown
-      .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-      .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-      .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-      .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
-      .replace(/\*(.*?)\*/gim, "<em>$1</em>")
-      .replace(/!\[image\]\((.*?)\)/gim, '<img src="$1" alt="image" style="max-width: 100%; max-height: 200px" />')
-      .replace(/\n/g, "<br>");
-  }
-
   getContent() {
     return this.state.content;
   }
@@ -92,7 +81,7 @@ export default class MarkdownEditor extends Component {
   updated() {
     if (this.state.mode === "preview") {
       const preview = this.$container.querySelector("#markdown-preview");
-      preview.innerHTML = this.renderMarkdown(this.state.content);
+      preview.innerHTML = renderMarkdown(this.state.content);
     }
   }
 }

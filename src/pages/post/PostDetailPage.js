@@ -6,6 +6,7 @@ import CommentListItem from "./component/CommentListItem.js";
 import {formatDateTime} from "../../util/dateUtil.js";
 import Component from "../../core/Component.js";
 import {navigate} from "../../router.js";
+import renderMarkdown from "../../util/renderMarkdown.js";
 
 export default class PostDetailPage extends Component {
     setup() {
@@ -64,8 +65,7 @@ export default class PostDetailPage extends Component {
                     </div>
                     <hr>
                     <div id="content-section">
-                        ${post.imageUrl ? `<img id="content-image" src="${post.imageUrl}" alt="">` : ""}
-                        <p id="content-text">${post.content}</p>
+                        <div id="content-text">${renderMarkdown(post.content)}</div>
                         <div id="content-stats">
                             <div class="content-stats ${post.isLiked ? "liked" : ""}" id="content-like-stat">
                                 <p id="content-like-stat-count">${post.likeCount}</p>
