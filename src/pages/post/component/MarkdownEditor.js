@@ -1,6 +1,7 @@
 import Component from "../../../core/Component.js";
 import {uploadImageToImgBB} from "../../../api/imgbbApi.js";
 import renderMarkdown from "../../../util/renderMarkdown.js";
+import textareaWrapSelection from "../../../util/textareaWrapSelection.js";
 
 export default class MarkdownEditor extends Component {
   setup() {
@@ -16,16 +17,26 @@ export default class MarkdownEditor extends Component {
     const {mode, content} = this.state;
 
     return `
-        <div id="markdown-editor-container">
-          <div id="editor-toolbar">
+    <div id="markdown-editor-container">
+        <div id="editor-toolbar">
             <div id="editor-toolbar-left"> 
-                <button class="tab-button ${mode === "write" ? "active" : ""}" data-mode="write">작성</button>
-                <button class="tab-button ${mode === "preview" ? "active" : ""}" data-mode="preview">프리뷰</button>
+              <button class="tab-button ${mode === "write" ? "active" : ""}" data-mode="write">작성</button>
+              <button class="tab-button ${mode === "preview" ? "active" : ""}" data-mode="preview">프리뷰</button>
             </div>
-            <div id="editor-toolbar-right"> 
-                <button id="image-upload-button">🖼️</button>
-                <span id="image-upload-status"></span>
-                <input type="file" id="image-file-input" accept="image/*" hidden />
+            <div id="editor-toolbar-right">
+              <span id="image-upload-status"></span>
+              <button class="editor-toolbar-item-button" id="image-upload-button">🖼️</button>
+              <input type="file" id="image-file-input" accept="image/*" hidden />
+              
+              <button class="editor-toolbar-item-button" id="editor-head-button">
+                  <p>𝐇</p>
+              </button> 
+              <button class="editor-toolbar-item-button" id="editor-italic-button">
+                  <em>𝑰</em>
+              </button> 
+              <button class="editor-toolbar-item-button" id="editor-bold-button">
+                  <strong>𝑩</strong>
+              </button> 
             </div>    
           </div>
 
@@ -36,8 +47,21 @@ export default class MarkdownEditor extends Component {
             <div id="markdown-preview">${renderMarkdown(content)}</div>
           `}
         </div>
-      </div>
+    </div>
     `;
+  }
+
+  mounted() {
+    if (this.state.mode === "write" && this.cursor) {
+      const $textarea = this.$container.querySelector("#markdown-textarea");
+
+      if ($textarea) {
+        $textarea.focus();
+        $textarea.setSelectionRange(this.cursor.selectionStart, this.cursor.selectionEnd);
+      }
+
+      this.cursor = null;
+    }
   }
 
   setEvent() {
@@ -46,8 +70,9 @@ export default class MarkdownEditor extends Component {
       this.setState({mode: newMode});
     });
 
-    this.addEvent("change", "#markdown-textarea", (e) => {
-      this.setState({content: e.target.value});
+    this.addEvent("input", "#markdown-textarea", (e) => {
+      this.state.content = e.target.value;
+      // this.setState({content: e.target.value});
     });
 
     this.addEvent("click", "#image-upload-button", () => {
@@ -71,6 +96,28 @@ export default class MarkdownEditor extends Component {
       } finally {
         $imageUploadStatus.textContent = "";
       }
+    });
+
+    this.addEvent("click", "#editor-head-button", () => {
+      const $textarea = this.$container.querySelector("#markdown-textarea");
+      const { value, selectionStart, selectionEnd } = textareaWrapSelection($textarea, "### ");
+      this.cursor = { selectionStart, selectionEnd };
+      this.setState({ content: value });
+
+    });
+
+    this.addEvent("click", "#editor-italic-button", () => {
+      const $textarea = this.$container.querySelector("#markdown-textarea");
+      const { value, selectionStart, selectionEnd } = textareaWrapSelection($textarea, "*", "*");
+      this.cursor = { selectionStart, selectionEnd };
+      this.setState({ content: value });
+    });
+
+    this.addEvent("click", "#editor-bold-button", () => {
+      const $textarea = this.$container.querySelector("#markdown-textarea");
+      const { value, selectionStart, selectionEnd } = textareaWrapSelection($textarea, "**", "**");
+      this.cursor = { selectionStart, selectionEnd };
+      this.setState({ content: value });
     });
   }
 

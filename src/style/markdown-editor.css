@@ -55,14 +55,14 @@
     font-weight: 600;
 }
 
-#image-upload-button {
+.editor-toolbar-item-button {
     padding: 6px 10px;
     font-size: 13px;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
-#image-upload-button:hover {
+.editor-toolbar-item-button:hover {
     background-color: #e2e6ea;
 }
 
