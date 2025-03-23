@@ -3,6 +3,7 @@ import { ROUTES } from "../../constants/routes.js";
 import {uploadImageToImgBB} from "../../api/imgbbApi.js";
 import Component from "../../core/Component.js";
 import {navigate} from "../../router.js";
+import MarkdownEditor from "./component/MarkdownEditor.js";
 
 export default class PostFormPage extends Component {
     setup() {
@@ -37,18 +38,20 @@ export default class PostFormPage extends Component {
             >
             
             <p class="post-form-title">내용*</p>
-            <textarea id="post-form-content-textarea" placeholder="내용을 입력해주세요.">${post.content || ''}</textarea>
-            
-            <p class="post-form-title">이미지</p>
-            <div id="post-form-image-section">
-                <input id="post-form-image-input" type="file" accept="image/*" hidden>
-                <label for="post-form-image-input" id="post-form-image-button">파일 선택</label>
-                <p id="post-form-image-name">${post.imageUrl || "선택된 파일 없음"}</p>
-            </div>
+            <div id="editor-container"></div>
             
             <button id="post-form-submit-button">완료</button>
         </div>
         `;
+    }
+
+    mounted() {
+        this.$editor = new MarkdownEditor({
+            initialContent: this.state.post.content
+        })
+
+        const $editorContainer = this.$container.querySelector("#editor-container");
+        $editorContainer.appendChild(this.$editor.getContainer());
     }
 
     setEvent() {
@@ -84,7 +87,7 @@ export default class PostFormPage extends Component {
 
     async handleSubmit() {
         const title = this.$container.querySelector("#post-form-title-input").value.trim();
-        const content = this.$container.querySelector("#post-form-content-textarea").value.trim();
+        const content = this.$editor.getContent();
         const { mode, postId, selectedImageFile, post } = this.state;
 
         if (!title || !content) {

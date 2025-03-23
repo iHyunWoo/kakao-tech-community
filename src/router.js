@@ -3,6 +3,7 @@ import Header from "./components/header/Header.js";
 
 const routes = [];
 const root = document.querySelector("#app");
+let currentComponent = null;
 
 export function addRoute(path, component) {
     routes.push({ path, component });
@@ -35,8 +36,15 @@ export function renderRoute() {
     const matched = matchRoute(window.location.pathname);
     if (matched) {
         const { component, params } = matched;
+
+        // 기존 컴포넌트 언마운트
+        if (currentComponent) {
+            currentComponent.unmount();
+        }
+        currentComponent = new component(...params)
+
         root.innerHTML = "";
-        root.appendChild(new component(...params).getContainer())
+        root.appendChild(currentComponent.getContainer())
         updateHeader(window.location.pathname);
     }
 }
