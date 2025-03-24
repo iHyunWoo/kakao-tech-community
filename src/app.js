@@ -8,6 +8,7 @@ import PostFormPage from "./pages/post/PostFormPage.js";
 import SignupPage from "./pages/signup/SignUpPage.js";
 import ProfileEditPage from "./pages/profile/ProfileEditPage.js";
 import PasswordEditPage from "./pages/profile/PasswordEditPage.js";
+import VDomPerformancePage from "./pages/V-DOMTestPage.js";
 
 localStorage.removeItem("isLoggedIn");
 const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -22,6 +23,7 @@ addRoute("/posts/:id", PostDetailPage);
 addRoute("/posts/form/:id?", PostFormPage);
 addRoute(ROUTES.PROFILE_EDIT, ProfileEditPage);
 addRoute(ROUTES.PASSWORD_EDIT, PasswordEditPage);
+// addRoute(ROUTES.TEST, VDomPerformancePage);
 
 // 초기 라우팅
 if (window.location.pathname === "/") {

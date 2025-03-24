@@ -26,14 +26,17 @@ export default class PostListPage extends Component {
                 <button id="write-post-button">게시글 작성</button>
             </div>
             <div id="post-list" class="post-list">
-                ${this.state.posts.map(post => {
-                    const item = new PostListItem({ post });
-                    return item.template();
-                }).join('')}
-
             </div>
         </div>
         `;
+    }
+
+    mounted() {
+        const $postList = this.$container.querySelector("#post-list");
+        this.state.posts.forEach(post => {
+            const postItem = new PostListItem({ post });
+            $postList.appendChild(postItem.getContainer());
+        });
     }
 
     setEvent() {
@@ -50,7 +53,7 @@ export default class PostListPage extends Component {
         this.setState({ isLoading: true });
 
         try {
-            const { data } = await getPosts(this.state.cursor, 8); // 커서 기반 데이터 가져오기
+            const { data } = await getPosts(this.state.cursor); // 커서 기반 데이터 가져오기
             const newPosts = data.posts;
 
             if (newPosts.length === 0) {
