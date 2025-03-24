@@ -20,16 +20,21 @@ export default class PostListPage extends Component {
 
     template() {
         return `
-        <div id="top-section">
-            <p id="top-hello">오늘도 성장하는 하루,<br> <strong>오늘공부</strong>와 함께해요!</p>
-            <button id="write-post-button">게시글 작성</button>
-        </div>
-        <div id="post-list" class="post-list">
+        <div> 
+            <div id="top-section">
+                <p id="top-hello">오늘도 성장하는 하루,<br> <strong>오늘공부</strong>와 함께해요!</p>
+                <button id="write-post-button">게시글 작성</button>
+            </div>
+            <div id="post-list" class="post-list">
+                ${this.state.posts.map(post => {
+                    const item = new PostListItem({ post });
+                    return item.template();
+                }).join('')}
+
+            </div>
         </div>
         `;
     }
-
-    mounted() {}
 
     setEvent() {
         this.addEvent("click", "#write-post-button", () => {
@@ -45,7 +50,7 @@ export default class PostListPage extends Component {
         this.setState({ isLoading: true });
 
         try {
-            const { data } = await getPosts(this.state.cursor); // 커서 기반 데이터 가져오기
+            const { data } = await getPosts(this.state.cursor, 8); // 커서 기반 데이터 가져오기
             const newPosts = data.posts;
 
             if (newPosts.length === 0) {
@@ -70,13 +75,6 @@ export default class PostListPage extends Component {
 
     render() {
         super.render();
-
-        // 렌더 시 PostListItem 컴포넌트를 추가
-        const $postList = this.$container.querySelector("#post-list");
-        this.state.posts.forEach(post => {
-            const postItem = new PostListItem({ post });
-            $postList.appendChild(postItem.getContainer());
-        });
     }
 
     handleScroll() {
