@@ -83,7 +83,7 @@ export default class PostListPage extends Component {
             const { data } = await getPosts(this.state.cursor, pageLimit); // 커서 기반 데이터 가져오기
             const newPosts = data.posts;
 
-            if (newPosts.length < pageLimit) {
+            if (newPosts.length === 0) {
                 this.setState({ hasNextPage: false });
                 return;
             }

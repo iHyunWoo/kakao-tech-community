@@ -132,11 +132,13 @@ export default class PostDetailPage extends Component {
 
     renderNewComments() {
         const $commentList = this.$container.querySelector("#comment-list");
-        $commentList.innerHTML = "";
 
         const commentToRender = this.state.comments.slice(this.renderCommentCount)
-        this.state.comments.forEach(comment => {
-            const commentItem = new CommentListItem({ comment, onDelete: this.onDeleteCommentPress.bind(this) });
+        commentToRender.forEach(comment => {
+            const commentItem = new CommentListItem({
+                comment,
+                onDelete: () => this.onDeleteCommentPress(comment.id)
+            });
             $commentList.appendChild(commentItem.getContainer());
         });
         this.renderCommentCount = this.state.comments.length;
@@ -169,7 +171,7 @@ export default class PostDetailPage extends Component {
         this.setState({ isLoading: true });
 
         try {
-            const { data } = await getComments(this.state.postId, this.state.cursor);
+            const { data } = await getComments(this.state.postId, this.state.cursor, pageLimit);
             const newComments = data.comments;
 
             if (newComments.length === 0) {
@@ -177,6 +179,10 @@ export default class PostDetailPage extends Component {
                 return;
             }
 
+            const $commentList = this.$container.querySelector("#comment-list");
+            $commentList.innerHTML = "";
+
+            this.renderCommentCount = 0
             this.setState({
                 comments: [...this.state.comments, ...newComments],
                 cursor: newComments[newComments.length - 1].id,
@@ -205,6 +211,10 @@ export default class PostDetailPage extends Component {
             await createComment(this.state.postId, content);
             alert("댓글이 등록되었습니다.");
 
+            const $commentList = this.$container.querySelector("#comment-list");
+            $commentList.innerHTML = "";
+
+            this.renderCommentCount = 0
             this.setState({ comments: [], cursor: null, hasNextPage: true });
             this.fetchComments();
             $commentEditor.value = "";
@@ -221,7 +231,8 @@ export default class PostDetailPage extends Component {
             await deleteComment(this.state.postId, commentId);
             alert("댓글이 삭제되었습니다.");
 
-            this.setState({ comments: [], cursor: null, hasNextPage: true });
+            this.renderCommentCount = 0
+            this.setState({ post: {...this.state.post, commentCount: this.state.post.commentCount - 1}, comments: [], cursor: null, hasNextPage: true });
             this.fetchComments();
         } catch (error) {
             console.error("댓글 삭제 실패:", error);
@@ -262,7 +273,7 @@ export default class PostDetailPage extends Component {
         this.deletePostModal.open();
     }
 
-    onDeleteCommentPress() {
-        this.deleteCommentModal.open();
+    onDeleteCommentPress(commentId) {
+        this.deleteCommentModal.open(commentId);
     }
 }

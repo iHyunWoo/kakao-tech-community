@@ -94,13 +94,14 @@ export default class Component {
     }
 
     initLoadingIndicator() {
-        if (!document.querySelector(".loading-overlay")) {
+        if (!document.querySelector("#component-loading-spinner")) {
             this.$loading = document.createElement("div");
             this.$loading.className = "loading-overlay hidden";
-            this.$loading.innerHTML = `<div class="loading-spinner"></div>`;
+            this.$loading.innerHTML = `<div id="component-loading-spinner" class="loading-spinner"></div>`;
             document.body.appendChild(this.$loading);
+            // this.$container.appendChild(this.$loading);
         } else {
-            this.$loading = document.querySelector(".loading-overlay");
+            this.$loading = document.querySelector("#component-loading-spinner");
         }
     }
 
