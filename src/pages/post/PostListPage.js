@@ -17,6 +17,7 @@ export default class PostListPage extends Component {
 
         this.loadCSS("/style/post-list-page.css");
         this.loadCSS("/style/loading-indicator.css");
+        this.fetchPosts();
     }
 
     template() {
