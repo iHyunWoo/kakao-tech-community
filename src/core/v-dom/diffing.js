@@ -28,5 +28,10 @@ export function diffing(oldVNode, newVNode) {
     children.push(diffing(oldVNode.children[i], newVNode.children[i]));
   }
 
+  // props 변경이 없고, 자식 노드 또한 변경이 없다면 patch X
+  if (props.length === 0 && children.every(child => child === null)) {
+    return null;
+  }
+
   return { type: "UPDATE", props, children };
 }
