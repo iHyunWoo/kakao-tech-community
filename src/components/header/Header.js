@@ -66,5 +66,10 @@ export default class Header extends Component {
             localStorage.removeItem("isLoggedIn");
             navigate(ROUTES.LOGIN);
         });
+
+        // <li className="header-profile-dropdown-item" id="header-profile-dropdown-test-button">테스트</li>
+        // this.addEvent("click", "#header-profile-dropdown-test-button", () => {
+        //     navigate(ROUTES.TEST);
+        // })
     }
 }

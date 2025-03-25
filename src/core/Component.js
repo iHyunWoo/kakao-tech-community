@@ -1,12 +1,17 @@
+import {htmlToVNode, renderVNode} from "./v-dom/V-DOM.js";
+import {diffing} from "./v-dom/diffing.js";
+import {patchToDOM} from "./v-dom/patchToDOM.js";
+
 export default class Component {
     props;
     state;
     $container;
+    _globalEvents = [];  // unmount 시 해제하기 위해 글로벌 이벤트 추적
+    _vnode = null;  // 가상 dom에 사용할 vnode 객체
 
     constructor(props = {}) {
         this.props = props;
         this.$container = document.createElement("div"); // 페이지 컨테이너 생성
-        this._globalEvents = [];  // unmount 시 해제하기 위해 글로벌 이벤트 추적
         this.setup();
         this.setEvent();
         this.render();
@@ -23,8 +28,25 @@ export default class Component {
     }
 
     render() {
-        this.$container.innerHTML = this.template();
+        // this.$container.innerHTML = this.template();
+        this._renderWithVDOM()
         this.mounted();
+    }
+
+    _renderWithVDOM() {
+        const newNode = htmlToVNode(this.template());
+
+        if(!this._vnode) {
+            // template을 기반으로 VNode 생성
+            const $element = renderVNode(newNode);
+            this.$container.innerHTML = "";
+            this.$container.append($element);
+        } else {
+            // VNode 객체가 존재한다면, 변경사항 비교 후 렌더링
+            const patchNode = diffing(this._vnode, newNode);
+            patchToDOM(this.$container, patchNode);
+        }
+        this._vnode = newNode;
     }
 
     mounted() {}
@@ -40,8 +62,10 @@ export default class Component {
     setEvent() {}
 
     setState(newState) {
+        console.time("render")
         this.state = { ...this.state, ...newState };
         this.render();
+        console.timeEnd("render")
     }
 
     addEvent(eventType, selector, callback) {

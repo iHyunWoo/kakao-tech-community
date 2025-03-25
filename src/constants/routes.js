@@ -7,4 +7,5 @@ export const ROUTES = {
     POST_FORM: (id) => `/posts/form/${id || ""}`,
     PROFILE_EDIT: "/profile/edit",
     PASSWORD_EDIT: "/password/edit",
+    TEST: "/test",
 };
