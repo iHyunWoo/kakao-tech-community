@@ -92,7 +92,7 @@ export default class PostDetailPage extends Component {
                     <button id="comment-write-button">댓글 등록</button>
                 </div>
                 <div id="comment-list"></div>
-                <div id="pagination-loading-indicator" style="display: ${this.state.hasNextPage ? "block" : "none"};">
+                <div id="pagination-loading-indicator" style="display: ${(this.state.hasNextPage && !this.state.isPostLoading) ? "block" : "none"};">
                     <div class="loading-spinner"></div>
                 </div>
             </div>
