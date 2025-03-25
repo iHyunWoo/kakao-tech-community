@@ -8,7 +8,9 @@ import Component from "../../core/Component.js";
 import {navigate} from "../../router.js";
 import renderMarkdown from "../../util/renderMarkdown.js";
 
+const pageLimit = 10;
 export default class PostDetailPage extends Component {
+    renderCommentCount = 0;
     setup() {
         this.state = {
             postId: this.props,
@@ -21,6 +23,7 @@ export default class PostDetailPage extends Component {
         };
 
         this.loadCSS("/style/post-detail-page.css");
+        this.loadCSS("/style/loading-indicator.css");
 
         this.deletePostModal = new Modal({
             title: "게시글을 삭제하시겠습니까?",
@@ -37,7 +40,6 @@ export default class PostDetailPage extends Component {
         });
 
         this.fetchPost();
-        this.fetchComments();
     }
 
     template() {
@@ -90,6 +92,9 @@ export default class PostDetailPage extends Component {
                     <button id="comment-write-button">댓글 등록</button>
                 </div>
                 <div id="comment-list"></div>
+                <div id="pagination-loading-indicator" style="display: ${(this.state.hasNextPage && !this.state.isPostLoading) ? "block" : "none"};">
+                    <div class="loading-spinner"></div>
+                </div>
             </div>
         </div>
 
@@ -99,7 +104,8 @@ export default class PostDetailPage extends Component {
     mounted() {
         this.getContainer().appendChild(this.deletePostModal.getContainer());
         this.getContainer().appendChild(this.deleteCommentModal.getContainer());
-        window.addEventListener("scroll", this.handleScroll.bind(this));
+        this.renderNewComments();
+        this.observeLoadingIndicator();
     }
 
     setEvent() {
@@ -107,6 +113,35 @@ export default class PostDetailPage extends Component {
         this.addEvent("click", "#content-like-stat", () => this.handleLikeToggle());
         this.addEvent("click", "#edit-button", () => this.onEditPostPress());
         this.addEvent("click", "#delete-button", () => this.onDeletePostPress());
+    }
+
+
+    observeLoadingIndicator() {
+        const $indicator = this.$container.querySelector(".loading-spinner");
+        if (!$indicator) return;
+
+        this.observer?.disconnect();
+        this.observer = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            if (entry.isIntersecting && !this.state.isLoading && this.state.hasNextPage) {
+                this.fetchComments();
+            }
+        });
+        this.observer.observe($indicator);
+    }
+
+    renderNewComments() {
+        const $commentList = this.$container.querySelector("#comment-list");
+
+        const commentToRender = this.state.comments.slice(this.renderCommentCount)
+        commentToRender.forEach(comment => {
+            const commentItem = new CommentListItem({
+                comment,
+                onDelete: () => this.onDeleteCommentPress(comment.id)
+            });
+            $commentList.appendChild(commentItem.getContainer());
+        });
+        this.renderCommentCount = this.state.comments.length;
     }
 
     async fetchPost() {
@@ -133,11 +168,10 @@ export default class PostDetailPage extends Component {
     async fetchComments() {
         if (this.state.isLoading || !this.state.hasNextPage) return;
 
-        this.showLoading();
         this.setState({ isLoading: true });
 
         try {
-            const { data } = await getComments(this.state.postId, this.state.cursor);
+            const { data } = await getComments(this.state.postId, this.state.cursor, pageLimit);
             const newComments = data.comments;
 
             if (newComments.length === 0) {
@@ -145,6 +179,10 @@ export default class PostDetailPage extends Component {
                 return;
             }
 
+            const $commentList = this.$container.querySelector("#comment-list");
+            $commentList.innerHTML = "";
+
+            this.renderCommentCount = 0
             this.setState({
                 comments: [...this.state.comments, ...newComments],
                 cursor: newComments[newComments.length - 1].id,
@@ -152,11 +190,9 @@ export default class PostDetailPage extends Component {
                 isLoading: false,
             });
 
-            this.renderComments();
         } catch (error) {
             console.error("댓글 로드 실패:", error);
         } finally {
-            this.hideLoading();
             this.setState({ isLoading: false });
         }
     }
@@ -175,6 +211,10 @@ export default class PostDetailPage extends Component {
             await createComment(this.state.postId, content);
             alert("댓글이 등록되었습니다.");
 
+            const $commentList = this.$container.querySelector("#comment-list");
+            $commentList.innerHTML = "";
+
+            this.renderCommentCount = 0
             this.setState({ comments: [], cursor: null, hasNextPage: true });
             this.fetchComments();
             $commentEditor.value = "";
@@ -191,7 +231,8 @@ export default class PostDetailPage extends Component {
             await deleteComment(this.state.postId, commentId);
             alert("댓글이 삭제되었습니다.");
 
-            this.setState({ comments: [], cursor: null, hasNextPage: true });
+            this.renderCommentCount = 0
+            this.setState({ post: {...this.state.post, commentCount: this.state.post.commentCount - 1}, comments: [], cursor: null, hasNextPage: true });
             this.fetchComments();
         } catch (error) {
             console.error("댓글 삭제 실패:", error);
@@ -232,31 +273,7 @@ export default class PostDetailPage extends Component {
         this.deletePostModal.open();
     }
 
-    onDeleteCommentPress() {
-        this.deleteCommentModal.open();
-    }
-
-    render() {
-        super.render();
-
-        this.renderComments();
-    }
-
-    renderComments() {
-        const $commentList = this.$container.querySelector("#comment-list");
-        $commentList.innerHTML = "";
-
-        this.state.comments.forEach(comment => {
-            const commentItem = new CommentListItem({ comment, onDelete: this.onDeleteCommentPress.bind(this) });
-            $commentList.appendChild(commentItem.getContainer());
-        });
-    }
-
-    handleScroll() {
-        if (this.state.isLoading || !this.state.hasNextPage) return;
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
-            this.fetchComments();
-        }
+    onDeleteCommentPress(commentId) {
+        this.deleteCommentModal.open(commentId);
     }
 }

@@ -13,6 +13,11 @@ export function diffing(oldVNode, newVNode) {
     }
   }
 
+  // 타입이 달라지면 교체
+  if (oldVNode.type !== newVNode.type) {
+    return { type: "REPLACE", newVNode };
+  }
+
   // props가 변경됐다면
   const props = [];
   for (const key in { ...oldVNode.props, ...newVNode.props }) {

@@ -46,12 +46,14 @@ export default class PostFormPage extends Component {
     }
 
     mounted() {
-        this.$editor = new MarkdownEditor({
-            initialContent: this.state.post.content
-        })
+        if (!this.$editor) {
+            this.$editor = new MarkdownEditor({
+                initialContent: this.state.post.content
+            })
 
-        const $editorContainer = this.$container.querySelector("#editor-container");
-        $editorContainer.appendChild(this.$editor.getContainer());
+            const $editorContainer = this.$container.querySelector("#editor-container");
+            $editorContainer.appendChild(this.$editor.getContainer());
+        }
     }
 
     setEvent() {
@@ -66,6 +68,7 @@ export default class PostFormPage extends Component {
             const postData = response.data;
             if (postData) {
                 this.setState({ post: { ...postData } });
+                this.$editor.setContent(postData.content);
             }
         } catch (error) {
             console.error("게시글 불러오기 실패:", error);

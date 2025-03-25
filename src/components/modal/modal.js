@@ -9,6 +9,7 @@ export default class Modal extends Component {
             onConfirm: this.props.onConfirm || null,
             isOpen: false,
         };
+        this.context = null;
 
         this.loadCSS("/style/modal.css");
     }
@@ -33,12 +34,13 @@ export default class Modal extends Component {
     setEvent() {
         this.addEvent("click", ".modal-close", () => this.close());
         this.addEvent("click", ".modal-confirm", () => {
-            if (this.state.onConfirm) this.state.onConfirm();
+            if (this.state.onConfirm) this.state.onConfirm(this.context);
             this.close();
         });
     }
 
-    open() {
+    open(context) {
+        this.context = context;
         this.setState({ isOpen: true });
     }
 

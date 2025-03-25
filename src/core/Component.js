@@ -12,10 +12,10 @@ export default class Component {
     constructor(props = {}) {
         this.props = props;
         this.$container = document.createElement("div"); // 페이지 컨테이너 생성
+        this.initLoadingIndicator();
         this.setup();
         this.setEvent();
         this.render();
-        this.initLoadingIndicator();
     }
 
     setup() {
@@ -97,12 +97,13 @@ export default class Component {
         if (!document.querySelector(".loading-overlay")) {
             this.$loading = document.createElement("div");
             this.$loading.className = "loading-overlay hidden";
-            this.$loading.innerHTML = `<div class="loading-spinner"></div>`;
+            this.$loading.innerHTML = `<div id="component-loading-spinner" class="loading-spinner"></div>`;
             document.body.appendChild(this.$loading);
         } else {
             this.$loading = document.querySelector(".loading-overlay");
         }
     }
+
 
     showLoading() {
         if (this.$loading) {

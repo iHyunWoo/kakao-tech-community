@@ -125,10 +125,7 @@ export default class MarkdownEditor extends Component {
     return this.state.content;
   }
 
-  updated() {
-    if (this.state.mode === "preview") {
-      const preview = this.$container.querySelector("#markdown-preview");
-      preview.innerHTML = renderMarkdown(this.state.content);
-    }
+  setContent(content) {
+    this.setState({content: content});
   }
 }
