@@ -23,6 +23,10 @@ if (window.location.pathname === "/") {
     navigate(initialRoute);
 }
 
+if (window.location.pathname === ROUTES.SIGNUP) {
+    navigate(ROUTES.LOGIN)
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     renderRoute();
 });

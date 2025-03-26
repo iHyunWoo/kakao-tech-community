@@ -71,7 +71,7 @@ export default class SignUpForm extends Component {
             </form>
             
             
-            <a id="login-button">로그인하러 가기</a>
+            <a id="login-button">로그인으로 돌아가기</a>
         </div>
 
         `;

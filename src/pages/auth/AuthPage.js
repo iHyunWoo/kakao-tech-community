@@ -1,6 +1,7 @@
 import Component from "../../core/Component.js";
 import LoginForm from "./component/LoginForm.js";
 import SignUpForm from "./component/SignUpForm.js";
+import {ROUTES} from "../../constants/routes.js";
 
 export default class AuthPage extends Component {
   setup() {
@@ -32,6 +33,8 @@ export default class AuthPage extends Component {
 
       $signupContainer.classList.add("active");
       $signupContainer.classList.remove("hidden-right");
+
+      window.history.pushState({}, "", ROUTES.SIGNUP);
     })
 
     this.addEvent("click", "#login-button", () => {
@@ -40,6 +43,8 @@ export default class AuthPage extends Component {
 
       $loginContainer.classList.remove("hidden-left");
       $loginContainer.classList.add("active");
+
+      window.history.pushState({}, "", ROUTES.LOGIN);
     })
 
     setTimeout(() => {
