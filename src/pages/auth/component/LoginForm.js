@@ -1,10 +1,10 @@
-import {ROUTES} from "../../constants/routes.js";
-import {validateEmail, validatePassword} from "../../util/validators.js";
-import {getUserInfo, login} from "../../api/userApi.js";
-import Component from "../../core/Component.js";
-import {navigate} from "../../router.js";
+import {ROUTES} from "../../../constants/routes.js";
+import {validateEmail, validatePassword} from "../../../util/validators.js";
+import {getUserInfo, login} from "../../../api/userApi.js";
+import Component from "../../../core/Component.js";
+import {navigate} from "../../../router.js";
 
-export default class LoginPage extends Component {
+export default class LoginForm extends Component {
     setup() {
         super.setup();
         this.state = {
@@ -23,17 +23,25 @@ export default class LoginPage extends Component {
         <div class="login-container">
             <h2 class="login-title">로그인</h2>
             <form id="login-form">
-                <label class="login-label" for="email">이메일</label>
-                <input class="login-input" type="text" id="email" value="${email}" placeholder="이메일을 입력하세요">
-                <p class="login-alert-message" id="email-alert-message">${emailError}</p>
-                
-                <label class="login-label" for="password">비밀번호</label>
-                <input class="login-input" type="password" id="password" value="${password}" placeholder="비밀번호를 입력하세요">
-                <p class="login-alert-message" id="password-alert-message">${passwordError || ""}</p>
-                
-                <input class="login-button" type="submit" value="로그인">
+                <div class="form-group">
+                    <label class="login-label" for="email">이메일</label>
+                    <input class="login-input" type="text" id="email" value="${email}" placeholder="이메일을 입력하세요" />
+                    <p class="login-alert-message" id="email-alert-message">${emailError || ""}</p>
+                </div>
+        
+                <div class="form-group">
+                    <label class="login-label" for="password">비밀번호</label>
+                    <input class="login-input" type="password" id="password" value="${password}" placeholder="비밀번호를 입력하세요" />
+                    <p class="login-alert-message" id="password-alert-message">${passwordError || ""}</p>
+                </div>
+        
+                <input class="login-button" type="submit" value="로그인" />
             </form>
-            <a id="signup-button">회원가입</a>
+    
+            <div class="signup-wrapper">
+                <span>계정이 없으신가요?</span>
+                <a id="signup-button">회원가입</a>
+            </div>
         </div>
         `;
     }
@@ -56,9 +64,9 @@ export default class LoginPage extends Component {
             this.onLoginSubmit();
         });
 
-        this.addEvent("click", "#signup-button", () => {
-            navigate(ROUTES.SIGNUP);
-        });
+        // this.addEvent("click", "#signup-button", () => {
+        //     navigate(ROUTES.SIGNUP);
+        // });
     }
 
     async handleLogin(email, password) {

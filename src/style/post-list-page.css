@@ -17,21 +17,22 @@
 
 #write-post-button {
     margin-left: auto;
-    background-color: #ACA0EB;
-
-    padding: 8px 36px;
-
-    border-radius: 16px;
-
-    font-size: 16px;
-    font-weight: 700;
+    background: linear-gradient(135deg, #7F6AEE, #ACA0EB);
+    padding: 10px 32px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
     color: #ffffff;
-    line-height: 25px;
+    border: none;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 #write-post-button:hover {
-    background-color: #7F6AEE;
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #6755e0, #9a8ceb);
 }
+
 
 #post-list-container {
     padding-bottom: 50px;
@@ -48,10 +49,16 @@
 .post-item {
     background-color: #ffffff;
     border-radius: 16px;
-    box-shadow: 3px 4px 4px rgba(204, 204, 204, 0.25);
-
-    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    transform: translateY(0);
 }
+
+.post-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
+
 
 /*제목*/
 .post-title {

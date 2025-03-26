@@ -24,8 +24,12 @@ export default class PostListPage extends Component {
         return `
         <div> 
             <div id="top-section">
-                <p id="top-hello">오늘도 성장하는 하루,<br> <strong>오늘공부</strong>와 함께해요!</p>
-                <button id="write-post-button">게시글 작성</button>
+                <p id="top-hello">
+                  매일의 성장 기록을<br>
+                  <strong>오늘공부</strong>에 남겨보세요.
+                </p>
+
+                <button id="write-post-button">새 글 쓰기</button>
             </div>
             <div id="post-list-container">
                 <div id="post-list" class="post-list">
