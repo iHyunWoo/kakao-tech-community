@@ -51,12 +51,15 @@ export default class PostDetailPage extends Component {
                 ${isPostLoading ? "" : post ? `
                 <div id="post-detail">
                     <div id="top-section">
+                        <div id="post-user">
+                            <img id="post-user-image" src="${post.user.profileImageUrl}" alt="">
+                            <p id="post-user-name">${post.user.nickname}</p>
+                        </div>
                         <h2 id="post-title">${post.title}</h2>
                         <div id="post-info">
-                            <div id="post-user">
-                                <img id="post-user-image" src="${post.user.profileImageUrl}" alt="">
-                                <p id="post-user-name">${post.user.nickname}</p>
+                            <div id="post-meta">
                                 <p id="post-created-at">${formatDateTime(post.createdAt)}</p>
+                                <p id="post-view-count">조회수: ${post.viewCount}</p>
                             </div>
                             ${post.isMine ? `
                             <div>
@@ -68,28 +71,25 @@ export default class PostDetailPage extends Component {
                     <hr>
                     <div id="content-section">
                         <div id="content-text">${renderMarkdown(post.content)}</div>
-                        <div id="content-stats">
-                            <div class="content-stats ${post.isLiked ? "liked" : ""}" id="content-like-stat">
-                                <p id="content-like-stat-count">${post.likeCount}</p>
-                                <p>좋아요</p>
-                            </div>
-                            <div class="content-stats" id="content-view-stat">
-                                <p>${post.viewCount}</p>
-                                <p>조회수</p>
-                            </div>
-                            <div class="content-stats" id="content-comment-stat">
-                                <p>${post.commentCount}</p>
-                                <p>댓글</p>
-                            </div>
+                        <div class="content-stats ${post.isLiked ? "liked" : ""}" id="content-like-stat">
+                            <img width="24px" height="24px" src="${post.isLiked ? "/resources/thumbs-up.svg" : "/resources/thumbs-up-purple.svg"}" alt="좋아요">
+                            <p id="content-like-stat-count">${post.likeCount}</p>
                         </div>
                     </div>
-                </div>` : "<p>게시글을 찾을 수 없습니다.</p>"}
+                </div>` : ""}
             </div>
             <div id="comment-section">
-                <div id="comment-write-div">
-                    <label><textarea id="comment-editor" placeholder="댓글을 남겨주세요!"></textarea></label>
-                    <hr>
-                    <button id="comment-write-button">댓글 등록</button>
+                <div>
+                    ${isPostLoading ? "" : post ? `
+                    <div id="content-comment-stat">
+                        <p>댓글</p>
+                        <p id="comment-count">${post.commentCount}</p>
+                    </div>
+                    <div id="comment-write-div">
+                        <label><textarea id="comment-editor" placeholder="댓글을 남겨주세요!"></textarea></label>
+                        <hr>
+                        <button id="comment-write-button">댓글 등록</button>
+                    </div>` : ""}
                 </div>
                 <div id="comment-list"></div>
                 <div id="pagination-loading-indicator" style="display: ${(this.state.hasNextPage && !this.state.isPostLoading) ? "block" : "none"};">
