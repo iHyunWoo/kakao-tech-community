@@ -4,7 +4,7 @@ import PostListItem from "./component/PostListItem.js";
 import Component from "../../core/Component.js";
 import {navigate} from "../../router.js";
 
-const pageLimit = 10;
+const pageLimit = 12;
 export default class PostListPage extends Component {
     renderPostCount = 0;
     setup() {
@@ -28,7 +28,7 @@ export default class PostListPage extends Component {
                   매일의 성장 기록을<br>
                   <strong>오늘공부</strong>에 남겨보세요.
                 </p>
-
+                
                 <button id="write-post-button">새 글 쓰기</button>
             </div>
             <div id="post-list-container">

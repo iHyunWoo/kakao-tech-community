@@ -12,13 +12,13 @@ export async function getPost(postId) {
     return apiRequest(`/posts/${postId}`, "GET", null)
 }
 
-export async function createPost(title, content, imageUrl) {
-    const body = {title, content, imageUrl}
+export async function createPost(title, content) {
+    const body = {title, content}
     return apiRequest(`/posts`, "POST", body)
 }
 
-export async function updatePost(postId, title, content, imageUrl) {
-    const body = {title, content, imageUrl}
+export async function updatePost(postId, title, content) {
+    const body = {title, content}
     return apiRequest(`/posts/${postId}`, "PUT", body)
 }
 

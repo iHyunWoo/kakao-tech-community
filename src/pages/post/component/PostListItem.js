@@ -11,28 +11,39 @@ export default class PostListItem extends Component {
     }
 
     template() {
-        const {id, title, likeCount, commentCount, viewCount, createdAt, user} = this.state.post;
+        const {id, title, imageUrl, likeCount, commentCount, createdAt, user} = this.state.post;
 
         return `
-        <div class="post-item" role="button" data-id="${id}">
-            <h2 class="post-title">${title}</h2>
-            <div class="post-stats-date">
-                <div class="post-stats">
-                    좋아요 ${likeCount} 댓글 ${commentCount} 조회수 ${viewCount}
+        <div class="post-card" role="button" data-id="${id}">
+            ${
+            imageUrl
+            ? `<img class="post-card-thumbnail" src="${imageUrl}" alt="${title}" />`
+            : `<div class="post-card-thumbnail placeholder"></div>`
+            }
+            <div class="post-card-body">
+                <h2 class="post-card-title">${title}</h2>
+                <div class="post-card-meta">
+                    <span class="post-time">${formatDateTime(createdAt)}</span>
+                    <span class="post-comments">· ${commentCount}개의 댓글</span>
                 </div>
-                <p class="post-date">${formatDateTime(createdAt)}</p>
             </div>
-            <hr class="post-hr">
-            <div class="post-user">
-                <img class="post-user-image" src="${user.profileImageUrl}" alt="프로필 이미지">
-                <p class="post-user-name">${user.nickname}</p>
-            </div>
-        </div>
+            <div class="post-card-footer">
+                <div class="post-card-author">
+                    <img src="${user.profileImageUrl}" class="author-image" alt="작성자 이미지">
+                    <span class="author-name">${user.nickname}</span>
+                </div>
+                <div class="post-card-like">
+                    <img width="24" height="24" src="/resources/thumbs-up-purple.svg" alt="좋아요">
+                    <span class="like-count">${likeCount}</span>
+                </div>
+                </div>
+          </div>
         `;
+
     }
 
     setEvent() {
-        this.addEvent("click", ".post-item", () => {
+        this.addEvent("click", ".post-card", () => {
             navigate(ROUTES.POST_DETAIL(this.state.post.id));
         });
     }
