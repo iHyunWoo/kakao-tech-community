@@ -54,8 +54,9 @@ function updateHeader(currentPath) {
     headerContainer.innerHTML = ""; // 기존 헤더 제거
 
     const headerConfig = {
-        [ROUTES.LOGIN]: { showBackButton: false, showProfile: false },
-        [ROUTES.SIGNUP]: { showBackButton: true, showProfile: false },
+        [ROUTES.AUTH]: { showBackButton: false, showProfile: false },
+        // [ROUTES.LOGIN]: { showBackButton: false, showProfile: false },
+        // [ROUTES.SIGNUP]: { showBackButton: true, showProfile: false },
         [ROUTES.POSTS]: { showBackButton: false, showProfile: true },
     };
 

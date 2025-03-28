@@ -6,6 +6,7 @@ import {navigate} from "../../router.js";
 
 export default class PasswordEditPage extends Component {
     setup() {
+        super.setup();
         this.state = {
             password: "",
             passwordConfirm: "",
@@ -22,20 +23,22 @@ export default class PasswordEditPage extends Component {
         const { password, passwordConfirm, errors } = this.state;
 
         return `
-        <div id="password-edit-container">
-            <h2 id="password-edit-header">비밀번호 수정</h2>
-    
-            <form id="password-edit-form">
-                <label class="password-label" for="password">비밀번호*</label>
-                <input class="password-input" type="password" id="password" placeholder="비밀번호를 입력하세요" value="${password}">
-                <p class="password-alert-message" id="password-alert-message">${errors.password || ""}</p>
+        <div id="password-edit-wrapper">
+            <div id="password-edit-card">
+                <h2 id="password-edit-header">비밀번호 수정</h2>
         
-                <label class="password-label" for="password-confirm">비밀번호 확인*</label>
-                <input class="password-input" type="password" id="password-confirm" placeholder="비밀번호를 한번 더 입력하세요" value="${passwordConfirm}">
-                <p class="password-alert-message" id="password-confirm-alert-message">${errors.passwordConfirm || ""}</p>
+                <form id="password-edit-form">
+                    <label class="password-label" for="password">비밀번호*</label>
+                    <input class="password-input" type="password" id="password" placeholder="비밀번호를 입력하세요" value="${password}" />
+                    <p class="password-alert-message" id="password-alert-message">${errors.password || ""}</p>
         
-                <input class="password-edit-button" type="submit" id="password-edit-submit-button" value="수정하기">
-            </form>
+                    <label class="password-label" for="password-confirm">비밀번호 확인*</label>
+                    <input class="password-input" type="password" id="password-confirm" placeholder="비밀번호를 한번 더 입력하세요" value="${passwordConfirm}" />
+                    <p class="password-alert-message" id="password-confirm-alert-message">${errors.passwordConfirm || ""}</p>
+        
+                    <input class="password-edit-button" type="submit" id="password-edit-submit-button" value="수정하기" />
+                </form>
+            </div>
         </div>
         `;
     }

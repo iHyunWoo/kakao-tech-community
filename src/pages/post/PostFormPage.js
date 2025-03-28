@@ -1,6 +1,5 @@
 import {createPost, getPost, updatePost} from "../../api/postApi.js";
 import { ROUTES } from "../../constants/routes.js";
-import {uploadImageToImgBB} from "../../api/imgbbApi.js";
 import Component from "../../core/Component.js";
 import {navigate} from "../../router.js";
 import MarkdownEditor from "./component/MarkdownEditor.js";
@@ -11,8 +10,7 @@ export default class PostFormPage extends Component {
         this.state = {
             mode: Object.keys(postId).length === 0 ? "create" : "update", // "create" or "update"
             postId: postId || null,
-            post: { title: "", content: "", imageUrl: "" },
-            selectedImageFile: null,
+            post: { title: "", content: "" },
         };
 
         this.loadCSS("/style/post-form-page.css");
@@ -57,7 +55,6 @@ export default class PostFormPage extends Component {
     }
 
     setEvent() {
-        this.addEvent("change", "#post-form-image-input", (e) => this.handleImageUpload(e));
         this.addEvent("click", "#post-form-submit-button", () => this.handleSubmit());
     }
 
@@ -77,21 +74,10 @@ export default class PostFormPage extends Component {
         }
     }
 
-    handleImageUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            this.setState({ selectedImageFile: file });
-            this.$container.querySelector("#post-form-image-name").textContent = file.name;
-        } else {
-            this.setState({ selectedImageFile: null });
-            this.$container.querySelector("#post-form-image-name").textContent = "선택된 파일 없음";
-        }
-    }
-
     async handleSubmit() {
         const title = this.$container.querySelector("#post-form-title-input").value.trim();
         const content = this.$editor.getContent();
-        const { mode, postId, selectedImageFile, post } = this.state;
+        const { mode, postId } = this.state;
 
         if (!title || !content) {
             alert("제목과 내용을 입력해주세요.");
@@ -99,23 +85,13 @@ export default class PostFormPage extends Component {
         }
 
         this.showLoading();
-        let imageUrl = post.imageUrl;
-        if (selectedImageFile) {
-            try {
-                imageUrl = await uploadImageToImgBB(selectedImageFile);
-            } catch (error) {
-                alert("이미지 업로드에 실패했습니다. 잠시 후 시도해주세요.");
-                this.hideLoading();
-                return;
-            }
-        }
 
         try {
             if (mode === "create") {
-                await createPost(title, content, imageUrl);
+                await createPost(title, content);
                 alert("게시글이 작성되었습니다.");
             } else {
-                await updatePost(postId, title, content, imageUrl);
+                await updatePost(postId, title, content);
                 alert("게시글이 수정되었습니다.");
             }
             navigate(ROUTES.POSTS);

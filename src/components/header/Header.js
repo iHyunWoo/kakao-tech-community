@@ -23,17 +23,17 @@ export default class Header extends Component {
             <div class="header-left">
                 ${showBackButton ? `
                     <button id="header-back-button">
-                        <img width="48px" height="48px" src="/resources/back-arrow.svg" alt="뒤로 가기"/>
+                        <img width="40px" height="40px" src="/resources/back-arrow.svg" alt="뒤로 가기"/>
                     </button>
                 ` : ""}
             </div>
-            <h1 class="header-title">오늘공부</h1>
-            <div class="header-right">
+            <img src="/resources/logo.svg" alt="로고" class="header-logo">
+            <div class="header-right" id="header-profile-wrapper">
                 ${showProfile ? `
                     <button id="header-profile-button">
                         <img id="header-profile-image" width="36px" height="36px" src="${profileImage}" alt="프로필"/>
                     </button>
-                    <ul id="header-profile-dropdown-menu" class="${dropdownVisible ? "" : "hidden"}">
+                    <ul id="header-profile-dropdown-menu">
                         <li class="header-profile-dropdown-item" id="header-profile-dropdown-edit-profile-button">회원정보 수정</li>
                         <li class="header-profile-dropdown-item" id="header-profile-dropdown-edit-password-button">비밀번호 수정</li>
                         <li class="header-profile-dropdown-item" id="header-profile-dropdown-logout-button">로그아웃</li> 
@@ -50,7 +50,7 @@ export default class Header extends Component {
         });
 
         this.addEvent("click", "#header-profile-button", () => {
-            this.setState({dropdownVisible: !this.state.dropdownVisible});
+            // this.setState({dropdownVisible: !this.state.dropdownVisible});
         });
 
         this.addEvent("click", "#header-profile-dropdown-edit-profile-button", () => {

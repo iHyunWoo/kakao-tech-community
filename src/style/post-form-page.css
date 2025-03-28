@@ -1,7 +1,7 @@
 #post-form-container {
     display: flex;
     flex-direction: column;
-    max-width: 600px;
+    max-width: 982px;
     margin: 24px auto;
 }
 

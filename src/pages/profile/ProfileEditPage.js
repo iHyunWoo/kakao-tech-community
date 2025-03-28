@@ -6,6 +6,7 @@ import {navigate} from "../../router.js";
 
 export default class ProfileEditPage extends Component {
     setup() {
+        super.setup();
         const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
         this.state = {
@@ -13,35 +14,39 @@ export default class ProfileEditPage extends Component {
             email: userInfo.email || "-",
             profileImageUrl: userInfo.profileImageUrl || "https://placehold.co/150",
             selectedImageFile: null,
+            nicknameError: "",
         };
 
         this.loadCSS("/style/profile-edit-page.css");
     }
 
     template() {
-        const { nickname, email, profileImageUrl } = this.state;
+        const { nickname, email, profileImageUrl, nicknameError } = this.state;
 
         return `
-        <div id="profile-edit-container">
-            <h2 id="profile-edit-header">회원정보 수정</h2>
-    
-            <p class="profile-edit-title">프로필 사진*</p>
-            <div id="profile-image-container">
-                <input id="profile-edit-profile-image-input" type="file" accept="image/*" hidden>
-                <img id="profile-edit-profile-image" src="${profileImageUrl}" alt=""/>
-                <div id="profile-edit-profile-image-edit-button">
-                    <p id="profile-edit-profile-image-edit-button-text">변경</p>
+        <div id="profile-edit-wrapper">
+            <div id="profile-edit-card">
+                <h2 id="profile-edit-header">회원정보 수정</h2>
+
+                <p class="profile-edit-title">프로필 사진</p>
+                <div id="profile-image-container">
+                    <input id="profile-edit-profile-image-input" type="file" accept="image/*" hidden>
+                    <img id="profile-edit-profile-image" src="${profileImageUrl}" alt="프로필 이미지" />
+                    <div id="profile-edit-profile-image-edit-button">
+                        <p id="profile-edit-profile-image-edit-button-text">변경</p>
+                    </div>
                 </div>
+
+                <p class="profile-edit-title">이메일</p>
+                <p id="profile-edit-email">${email}</p>
+
+                <p class="profile-edit-title">닉네임</p>
+                <input id="profile-edit-nickname-input" type="text" value="${nickname}" />
+                <p class="profile-edit-alert-message" id="nickname-alert-message">${nicknameError || ""}</p>
+
+
+                <button id="profile-edit-submit-edit-button">수정 완료</button>
             </div>
-    
-            <p class="profile-edit-title">이메일</p>
-            <p id="profile-edit-email">${email}</p>
-    
-            <p class="profile-edit-title">닉네임</p>
-            <input id="profile-edit-nickname-input" type="text" value="${nickname}">
-    
-            <button id="profile-edit-submit-edit-button">수정완료</button>
-            <button id="profile-edit-delete-account-button">회원 탈퇴</button>
         </div>
         `;
     }
@@ -75,15 +80,15 @@ export default class ProfileEditPage extends Component {
 
         // 닉네임 검증
         if (!nickname) {
-            alert("닉네임을 입력해주세요.");
+            this.setState({nicknameError: "닉네임을 입력해주세요."});
             return;
         }
         if (nickname.includes(" ")) {
-            alert("닉네임에는 공백이 포함될 수 없습니다.");
+            this.setState({nicknameError: "닉네임에는 공백이 포함될 수 없습니다."});
             return;
         }
         if (nickname.length > 10) {
-            alert("닉네임은 최대 10자까지 가능합니다.");
+            this.setState({nicknameError: "닉네임은 최대 10자까지 가능합니다."});
             return;
         }
 

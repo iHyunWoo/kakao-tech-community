@@ -1,5 +1,5 @@
 #post-detail-container {
-    max-width: 600px;
+    max-width: 982px;
     margin: 24px auto 30px;
 
     display: flex;
@@ -11,15 +11,18 @@
     width: 100%;
 
     margin-bottom: 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
 }
 
 #post-title {
     width: 100%;
 
     font-weight: 700;
-    font-size: 24px;
-
-    margin-bottom: 12px;
+    font-size: 28px;
 }
 
 #post-info {
@@ -28,6 +31,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 #post-user {
@@ -37,21 +41,26 @@
 }
 
 #post-user-image {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 100%;
     margin-right: 10px;
 }
 
 #post-user-name {
     font-weight: 700;
-    font-size: 15px;
-    margin-right: 24px;
+    font-size: 14px;
 }
 
-#post-created-at {
+#post-meta {
+    display: flex;
+    flex-direction: row;
+
     font-weight: 400;
-    font-size: 14px;
+    font-size: 13px;
+    color: #00000066;
+
+    gap: 12px;
 }
 
 .edit-delete-button {
@@ -75,7 +84,7 @@ hr {
 #content-section {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
 
     margin: 24px 0;
 }
@@ -88,51 +97,57 @@ hr {
 }
 
 #content-text {
-    width: 544px;
+    width: 982px;
 
     font-size: 15px;
     font-weight: 400;
     line-height: 21px;
 
-    margin-bottom: 36px;
-}
-
-#content-stats {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-}
-
-.content-stats {
-    width: 116px;
-    height: 77px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-
-    background: #D9D9D9;
-    border-radius: 16px;
-
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.content-stats.liked {
-    background-color: #ACA0EB;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-bottom: 52px;
 }
 
 #content-like-stat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+
     cursor: pointer;
     transition: background-color 0.3s ease;
+
+    color: #ACA0EB;
+
+    border: 1px solid #ACA0EB;
+    border-radius: 24px;
+
+    padding: 6px 18px;
+}
+
+#content-like-stat.liked {
+    background-color: #ACA0EB;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    color: white;
 }
 
 
 /*댓글*/
+#content-comment-stat {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+    font-weight: 700;
+    font-size: 20px;
+
+    margin-bottom: 12px;
+}
+
+#comment-count {
+    color: #ACA0EB;
+}
+
 #comment-section {
     margin-top: 24px;
 }
@@ -173,8 +188,14 @@ hr {
     display: flex;
     flex-direction: column;
 
-    margin-bottom: 20px;
+    border-bottom: 1px solid #D9D9D9;
 
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+#comment-list .comment-item:last-of-type {
+    border: none;
 }
 
 .comment-top-section {
@@ -190,8 +211,8 @@ hr {
 }
 
 .comment-user-image {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
 
     border-radius: 100%;
 
@@ -202,12 +223,13 @@ hr {
     font-weight: 700;
     font-size: 15px;
 
-    margin-right: 24px;
+    margin-right: 16px;
 }
 
 .comment-date {
     font-weight: 400;
-    font-size: 14px;
+    font-size: 13px;
+    color: #00000088;
 }
 
 .comment-edit-delete-button {
