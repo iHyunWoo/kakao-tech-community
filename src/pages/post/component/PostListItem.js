@@ -1,28 +1,51 @@
-import {navigateTo} from "../../../util/navigateTo.js";
 import {ROUTES} from "../../../constants/routes.js";
 import {formatDateTime} from "../../../util/dateUtil.js";
+import Component from "../../../core/Component.js";
+import {navigate} from "../../../router.js";
 
-export default function PostListItem(post) {
-    const $postItem = document.createElement("div");
-    $postItem.className = "post-item";
-    $postItem.setAttribute("role", "button");
-    $postItem.setAttribute("data-id", post.id);
-    $postItem.innerHTML = `
-        <h2 class="post-title">${post.title}</h2>
-        <div class="post-stats-date">
-            <div class="post-stats">
-                좋아요 ${post.likeCount} 댓글 ${post.commentCount} 조회수 ${post.viewCount}
+export default class PostListItem extends Component {
+    setup() {
+        this.state = {
+            post: this.props.post,
+        }
+    }
+
+    template() {
+        const {id, title, imageUrl, likeCount, commentCount, createdAt, user} = this.state.post;
+
+        return `
+        <div class="post-card" role="button" data-id="${id}">
+            ${
+            imageUrl
+            ? `<img class="post-card-thumbnail" src="${imageUrl}" alt="${title}" />`
+            : `<div class="post-card-thumbnail placeholder"></div>`
+            }
+            <div class="post-card-body">
+                <h2 class="post-card-title">${title}</h2>
+                <div class="post-card-meta">
+                    <span class="post-time">${formatDateTime(createdAt)}</span>
+                    <span class="post-comments">· ${commentCount}개의 댓글</span>
+                </div>
             </div>
-            <p class="post-date">${formatDateTime(post.createdAt)}</p>
-        </div>
-        <hr class="post-hr">
-        <div class="post-user">
-            <img class="post-user-image" src="${post.user.profileImageUrl}" alt="프로필 이미지">
-            <p class="post-user-name">${post.user.nickname}</p>
-        </div>
-    `;
-    $postItem.addEventListener("click", () => {
-        navigateTo(ROUTES.POST_DETAIL(post.id));
-    });
-    return $postItem;
+            <div class="post-card-footer">
+                <div class="post-card-author">
+                    <img src="${user.profileImageUrl}" class="author-image" alt="작성자 이미지">
+                    <span class="author-name">${user.nickname}</span>
+                </div>
+                <div class="post-card-like">
+                    <img width="24" height="24" src="/resources/thumbs-up-purple.svg" alt="좋아요">
+                    <span class="like-count">${likeCount}</span>
+                </div>
+                </div>
+          </div>
+        `;
+
+    }
+
+    setEvent() {
+        this.addEvent("click", ".post-card", () => {
+            navigate(ROUTES.POST_DETAIL(this.state.post.id));
+        });
+    }
 }
+

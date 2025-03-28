@@ -12,8 +12,9 @@ button {
     cursor: pointer; /* 클릭 가능한 요소로 유지 */
 }
 
-html, body {
-    background-color: #F4F5F7;
+html {;
+    /*background: #F4F5F7;*/
+    background: linear-gradient(to bottom, #8BB5FF44, white) no-repeat fixed;
     height: 100%;
 
     font-family: "Noto Sans KR", sans-serif;

@@ -1,5 +1,6 @@
 export const ROUTES = {
     HOME: "/",
+    AUTH: "/login",
     LOGIN: "/login",
     SIGNUP: "/signup",
     POSTS: "/posts",
@@ -7,4 +8,5 @@ export const ROUTES = {
     POST_FORM: (id) => `/posts/form/${id || ""}`,
     PROFILE_EDIT: "/profile/edit",
     PASSWORD_EDIT: "/password/edit",
+    TEST: "/test",
 };
